@@ -1,0 +1,46 @@
+.home-page-content{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    width : 100vw;
+    align-items: center;
+}
+
+.home-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+.home-page h1{
+    color: white;
+    margin: 20px auto;
+}
+
+.home-page-header{
+    width: 750px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 30px;
+}
+
+@media screen and (max-width: 768px){
+    .home-page-header{
+        width: 100%;
+        flex-direction: column;
+    }
+    .dropdown{
+        margin-bottom: 15px;
+    }
+}
+
+
+.icon{
+    width: 40px;
+    height: 40px;
+}
+
+
