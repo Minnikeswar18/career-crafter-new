@@ -8,27 +8,7 @@ import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 import axios from 'axios';
 
-var path = require("path");
-require("dotenv").config({
-  path: "../.env",
-});
-
 function App() {
-
-  const checkJwt = () => {
-    const jwt = localStorage.getItem('jwt');
-    if(jwt) {
-      axios.post('http://localhost:8000/auth/verifyjwt', {jwt})
-      .then((response) => {
-        return true;
-      }).catch((error) => {
-        console.log(error.response.data);
-        localStorage.removeItem('jwt');
-        return false;
-      });
-    }
-    return false;
-  }
 
   return (
     <>
@@ -38,8 +18,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/entry" element={checkJwt ? <Navigate to = "/home" />:<EntryPage />} />
-          <Route path="/home" element={checkJwt ? <HomePage /> : <Navigate to = "/entry" />} />
+          <Route path="/entry" element={<EntryPage />} />
+          <Route path="/home" element={<HomePage /> } />
         </Routes>
       </Router>
     </>

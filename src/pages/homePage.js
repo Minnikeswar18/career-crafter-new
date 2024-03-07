@@ -6,8 +6,16 @@ import AddJobForm from './components/addJobForm';
 import AckModal from './components/ackModal';
 import $ from 'jquery';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import checkJwt from '../helpers/jwt';
 
 const INITIAL_SORT_STATE = 0;
+
+const ACK_TYPE = {
+  SUCCESS : 'success',
+  ERROR : 'danger',
+  WARNING : 'warning'
+}
 
 // retrieve jobs from the database
 const jobs = [
@@ -43,11 +51,21 @@ const jobs = [
     keyResponsibilites: 'Develop app',
     datePosted: 'Thu Jun 24 2022',
     company: 'Google'
+  },
+  {
+    title: 'System Engineer',
+    location: 'Vizag',
+    workType: 'Full Time',
+    workMode: 'Work from Office',
+    salary: '12LPA',
+    description: 'Develop app',
+    keyResponsibilites: 'Develop app',
+    datePosted: 'Thu Jan 14 2014',
+    company: 'IBM'
   }
 ]
 
 function HomePage() {
-  const jwt = localStorage.getItem('jwt');
   const [jobList, setJobList] = useState(jobs);
   const [originalJobList, setOriginalJobList] = useState(jobs);
   const [sortState , setSortState] = useState(INITIAL_SORT_STATE);
@@ -57,7 +75,44 @@ function HomePage() {
   const handleCloseAck = () => setShowAck(false);
   const handleShowAck = () => setShowAck(true);
 
-  const sendAck = async(message, type = "success") => {
+  const navigate = useNavigate();
+
+    useEffect(() => {
+      checkJwt().then((isJwtValid) => {
+          if(!isJwtValid) {
+            navigate('/entry');
+          }
+          else{
+            const jwtToken = localStorage.getItem('jwt');
+            axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+          }
+      }
+      );
+  });
+
+  const onLoad = async() => {
+    try{
+      const jobs = await axios.get('http://localhost:8000/job/getjobs');
+      setJobList(jobs.data);
+      setOriginalJobList(jobs.data);
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
+  const temp = () =>{
+    axios.post('http://localhost:8000/job/add')
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+
+  const sendAck = async(message , type) => {
     setAckMessage(message);
     setAckType(type);
     handleShowAck();
@@ -83,19 +138,19 @@ function HomePage() {
     const data = Object.fromEntries(formData.entries())
     const newJob = getJob(data);
 
-      axios.post(`http://localhost:${process.env.BACKEND_PORT}/job/add`, newJob)
+      axios.post(`http://localhost:8000/job/add`, newJob)
       .then((response) => {
-        sendAck('Job added successfully');
+        sendAck('Job added successfully' , ACK_TYPE.SUCCESS);
       })
       .catch((error) => {
-        sendAck(error, 'danger');
+        sendAck(error.response.data, ACK_TYPE.ERROR);
       });
     
-    setOriginalJobList(prevJobList => [...prevJobList, newJob]);
-    //TODO: update job table in the database
+    // setOriginalJobList(prevJobList => [...prevJobList, newJob]);
+    // //TODO: update job table in the database
 
     handleClose()
-    handleShowAck()
+    // handleShowAck()
   }
   
   const deleteJob = (index) => {
@@ -143,7 +198,7 @@ function HomePage() {
       <Header />
       <AddJobForm addjobform={addJob}/>
       <AckModal message = {ackMessage} ackType = {ackType} showAck = {showAck} handleCloseAck = {handleCloseAck}/>
-      <h1>Jobs Posted by You</h1>
+      <h1 onClick={temp}>Jobs Posted by You</h1>
       <div className='home-page-header'>
         <div className ="dropdown">
           <button className ="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

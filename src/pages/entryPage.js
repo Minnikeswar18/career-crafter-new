@@ -5,22 +5,74 @@ import loginImg from '../assets/img/entry_page.png'
 import signupImg from '../assets/img/signup_page.png'
 import axios from 'axios';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import checkJwt from '../helpers/jwt';
+import AckModal from './components/ackModal';
 
 function EntryPage() {
+
+    const ACK_TYPE = {
+        SUCCESS : 'success',
+        ERROR : 'danger',
+        WARNING : 'warning'
+      }
+
+    const [isLogin, setIsLogin] = useState(true);
+    const [showAck, setShowAck] = useState(false);
+    const [ackMessage, setAckMessage] = useState('');
+    const [ackType, setAckType] = useState('');
+
+    const handleShowAck = () => setShowAck(true);
+    const handleCloseAck = () => setShowAck(false);
+    
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        checkJwt().then((isJwtValid) => {
+            if(isJwtValid) {
+                navigate('/home');
+            }
+        }
+        );
+    });
+
+    const sendAck = (message , type) => {
+        setAckMessage(message);
+        setAckType(type);
+        handleShowAck();
+    }
+
     const handleLogin = (event) => {
         event.preventDefault();
+
         const formData =  new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
+
         axios.post('http://localhost:8000/auth/login', data)
         .then((response) => {
             localStorage.setItem('jwt', response.data.token);
+            sendAck('Logged in successfully', ACK_TYPE.SUCCESS);
             window.location.href = '/home';
         }).catch((error) => {
-            console.log(error);
+            sendAck(error.response.data, ACK_TYPE.ERROR);
         });
     }
 
-    const [isLogin, setIsLogin] = useState(true);
+    const handleSignup = async (event) => {
+        event.preventDefault();
+        const formData =  new FormData(event.target)
+        const data = Object.fromEntries(formData.entries())
+        data.isRecruiter = data.isRecruiter !== undefined ;
+        try{
+            await axios.post('http://localhost:8000/auth/register', data);
+            sendAck('Account created and verification email sent successfully', ACK_TYPE.SUCCESS);
+            setIsLogin(true);
+        }
+        catch(error){
+            sendAck(error.response.data, ACK_TYPE.ERROR);
+        }
+    }
+
     const toggle = () => {
         setTimeout(() => {
             setIsLogin(!isLogin);
@@ -29,6 +81,7 @@ function EntryPage() {
 
     return (
         <div className="entry-page">
+            <AckModal showAck={showAck} message={ackMessage} ackType={ackType} handleCloseAck ={handleCloseAck}/>
             <Header/>
             <div className="entry-content">
                 <div className="container">
@@ -46,7 +99,7 @@ function EntryPage() {
                             <div className="input-boxes">
                                 <div className="input-box">
                                 <i className="fas fa-envelope" />
-                                <input type="text" name = 'email' placeholder="Enter your email" required={true} />
+                                <input type="email" name = 'email' placeholder="Enter your email" required={true} />
                                 </div>
                                 <div className="input-box">
                                 <i className="fas fa-lock" />
@@ -71,34 +124,36 @@ function EntryPage() {
                         </div>
                         <div className="signup-form">
                             <div className="title">Signup</div>
-                            <form action="#">
+                            <form onSubmit={handleSignup}>
                             <div className="input-boxes">
                                 <div className="input-box">
                                 <i className="fas fa-user" />
-                                <input type="text" placeholder="Enter Username" required="" />
+                                <input type="text" name='username' placeholder="Enter Username" required={true} />
                                 </div>
                                 <div className="input-box">
                                 <i className="fas fa-envelope" />
-                                <input type="text" placeholder="Enter your email" required="" />
+                                <input type="email" name='email' placeholder="Enter your email" required={true} />
                                 </div>
                                 <div className="input-box">
                                 <i className="fas fa-lock" />
                                 <input
+                                    name='password'
                                     type="password"
                                     placeholder="Enter your password"
-                                    required=""
+                                    required={true}
                                 />
                                 </div>
                                 <div className="input-box">
                                 <i className="fas fa-lock" />
                                 <input
+                                    name='confirmPassword'
                                     type="password"
                                     placeholder="Confirm your password"
-                                    required=""
+                                    required={true}
                                 />
                                 </div>
                                 <div className="form-check">
-                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"></input>
+                                    <input className="form-check-input" name='isRecruiter' type="checkbox" value="" id="flexCheckDefault"></input>
                                     <label className="form-check-label" htmlFor="flexCheckDefault">
                                         I am a recruiter
                                     </label>
