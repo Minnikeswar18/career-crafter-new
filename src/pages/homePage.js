@@ -72,12 +72,13 @@ function HomePage() {
   const [showAck, setShowAck] = useState(false);
   const [ackMessage, setAckMessage] = useState('');
   const [ackType, setAckType] = useState('');
+  
   const handleCloseAck = () => setShowAck(false);
   const handleShowAck = () => setShowAck(true);
 
   const navigate = useNavigate();
 
-    useEffect(() => {
+  useEffect(() => {
       checkJwt().then((isJwtValid) => {
           if(!isJwtValid) {
             navigate('/entry');
@@ -111,7 +112,6 @@ function HomePage() {
     });
   }
 
-
   const sendAck = async(message , type) => {
     setAckMessage(message);
     setAckType(type);
@@ -133,24 +133,20 @@ function HomePage() {
     return newJob;
   }
 
-  const addJob = (event , handleClose , handleShowAck) =>{
+  const addJob = (event , handleClose) =>{
     const formData =  new FormData(event.target)
     const data = Object.fromEntries(formData.entries())
     const newJob = getJob(data);
 
-      axios.post(`http://localhost:8000/job/add`, newJob)
-      .then((response) => {
-        sendAck('Job added successfully' , ACK_TYPE.SUCCESS);
-      })
-      .catch((error) => {
-        sendAck(error.response.data, ACK_TYPE.ERROR);
-      });
-    
-    // setOriginalJobList(prevJobList => [...prevJobList, newJob]);
-    // //TODO: update job table in the database
+    axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/add`, newJob)
+    .then((response) => {
+      sendAck('Job added successfully' , ACK_TYPE.SUCCESS);
+    })
+    .catch((error) => {
+      sendAck(error.response.data, ACK_TYPE.ERROR);
+    });
 
     handleClose()
-    // handleShowAck()
   }
   
   const deleteJob = (index) => {
@@ -162,10 +158,10 @@ function HomePage() {
     let newJobList = jobList;
     $('#' + sortState).removeClass('active');
     if(index === 0){
-      newJobList = jobList.sort((a, b) => new Date(a.datePosted) - new Date(b.datePosted));
+      newJobList = jobList.sort((a, b) => new Date(b.datePosted) - new Date(a.datePosted));
     }
     else if(index === 1){
-      newJobList = jobList.sort((a, b) => new Date(b.datePosted) - new Date(a.datePosted));
+      newJobList = jobList.sort((a, b) => new Date(a.datePosted) - new Date(b.datePosted));
     }
     else if(index === 2){
       newJobList = jobList.sort((a, b) => a.title.localeCompare(b.title));
@@ -205,8 +201,8 @@ function HomePage() {
             Sort by
           </button>
           <ul className ="dropdown-menu dropdown-menu-dark">
-            <li><a id='0' className ="dropdown-item active" onClick={() => sortJobs(0)} href="#">Date oldest</a></li>
-            <li><a id='1' className ="dropdown-item" onClick={() => sortJobs(1)} href="#">Date latest</a></li>
+            <li><a id='0' className ="dropdown-item active" onClick={() => sortJobs(0)} href="#">Date latest</a></li>
+            <li><a id='1' className ="dropdown-item" onClick={() => sortJobs(1)} href="#">Date oldest</a></li>
             <li><a id='2' className ="dropdown-item" onClick={() => sortJobs(2)} href="#">Role ascending</a></li>
             <li><a id='3' className ="dropdown-item" onClick={() => sortJobs(3)} href="#">Role descending</a></li>
           </ul>

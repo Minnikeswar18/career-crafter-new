@@ -5,17 +5,26 @@ import loginImg from '../assets/img/entry_page.png'
 import signupImg from '../assets/img/signup_page.png'
 import axios from 'axios';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import checkJwt from '../helpers/jwt';
 import AckModal from './components/ackModal';
+import { useNavigate } from 'react-router-dom';
+
+const ACK_TYPE = {
+    SUCCESS : 'success',
+    ERROR : 'danger',
+    WARNING : 'warning'
+}
 
 function EntryPage() {
 
-    const ACK_TYPE = {
-        SUCCESS : 'success',
-        ERROR : 'danger',
-        WARNING : 'warning'
-      }
+    useEffect(() => {
+        checkJwt().then((isJwtValid) => {
+            if(isJwtValid) {
+              navigate('/home');
+            }
+        }
+        );
+    });
 
     const [isLogin, setIsLogin] = useState(true);
     const [showAck, setShowAck] = useState(false);
@@ -27,14 +36,6 @@ function EntryPage() {
     
     const navigate = useNavigate();
 
-    useEffect(() => {
-        checkJwt().then((isJwtValid) => {
-            if(isJwtValid) {
-                navigate('/home');
-            }
-        }
-        );
-    });
 
     const sendAck = (message , type) => {
         setAckMessage(message);
@@ -48,7 +49,7 @@ function EntryPage() {
         const formData =  new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
 
-        axios.post('http://localhost:8000/auth/login', data)
+        axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/login`, data)
         .then((response) => {
             localStorage.setItem('jwt', response.data.token);
             sendAck('Logged in successfully', ACK_TYPE.SUCCESS);
@@ -64,7 +65,7 @@ function EntryPage() {
         const data = Object.fromEntries(formData.entries())
         data.isRecruiter = data.isRecruiter !== undefined ;
         try{
-            await axios.post('http://localhost:8000/auth/register', data);
+            await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/register`, data);
             sendAck('Account created and verification email sent successfully', ACK_TYPE.SUCCESS);
             setIsLogin(true);
         }
