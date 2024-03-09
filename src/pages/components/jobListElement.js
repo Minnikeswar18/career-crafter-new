@@ -7,8 +7,17 @@ function JobListElement({job , deleteFunction , index , handleShowAck}){
     const handleShowView = () => setShowView(true);
     const handleCloseView = () => setShowView(false);
 
+    const getDate = (date) =>{
+        if (!(date instanceof Date)) {
+            date = new Date(date);
+        }
+        const options = { day: '2-digit', month: 'long', year: 'numeric' };
+        const formattedDate = date.toLocaleDateString('en-US', options);
+        return formattedDate;
+    }
+
     async function deleteElement(){
-        deleteFunction(index);
+        await deleteFunction(job.jobId);
         handleShowAck();
     }
     return(
@@ -16,12 +25,12 @@ function JobListElement({job , deleteFunction , index , handleShowAck}){
             <ViewJob job={job} show = {showView} handleClose ={handleCloseView}/>
             <div className="main-div">
                 <h1 className="main-top">
-                    {job.title}
+                    {job.jobTitle}
                 </h1>
                 <div className="main-bottom">
-                    <h5 className='job-id'> <b>Date: </b> {job.datePosted} </h5>
-                    <h5 className='location'> <b>Location: </b> {job.location} </h5>
-                    <h5 className='work-type'> <b>Work Type: </b> {job.workType} </h5>
+                    <h5 className='job-id'> <b>Date: </b> {getDate(job.datePosted)} </h5>
+                    <h5 className='work-type'> <b>Work Type: </b> {job.jobType} </h5>
+                    <h5 className='work-mode'> <b>Work Mode: </b> {job.jobMode} </h5>
                 </div>
             </div>
             <div className='buttons'>

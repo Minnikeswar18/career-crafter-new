@@ -19,3 +19,7 @@
         height: 80px;
     }
 }
+
+.grey-bg{
+    background: rgb(224, 223, 223) !important;
+}

@@ -26,49 +26,73 @@ function AddJobForm({addjobform}) {
 
       <Modal show={showForm} onHide={handleCloseForm} size='lg' backdrop="static">
         <Modal.Header closeButton>
-          <Modal.Title>Create a new vacancy</Modal.Title>
+          <Modal.Title>Create a new job</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <form onSubmit={(event) => handleSubmit(event)}>
             <div className="form-floating mb-3">
-                <input type = "hidden" name="company" value={"Microsoft"}/>
-                <input type="text" className="form-control" placeholder="Company" value={'Microsoft'} disabled/>
-                <label htmlFor="company-name">Company</label>
+                <input type = "hidden" name="company"/>
+                <input type="text" className="form-control" name= "companyName" placeholder="Company Name" required/>
+                <label htmlFor="company-name">Company Name</label>
             </div>
             <div className="form-floating mb-3">
                 <input type="text" className="form-control" name ="jobRole" placeholder="Job Role" required/>
                 <label htmlFor="job-role">Job Role</label>
             </div>
-            <div className="form-floating mb-3">
-                <input type="text" className="form-control" name ="jobLocation" placeholder="Job Location" required/>
-                <label htmlFor="job-location">Job Location</label>
-            </div>
-            <select className="form-select mb-3" aria-label="Default select example" name='workMode' defaultValue="Select work mode" required>
-                <option disabled >Select work mode</option>
-                <option value="WFO">Work from Office</option>
-                <option value="WFH">Work from Home</option>
+            <div className="input-group mb-3">
+              <label className="input-group-text grey-bg" for="inputGroupSelect01">Work Mode</label>
+              <select className="form-select" id="inputGroupSelect01" name='workMode'>
+                <option selected value="Work from Office">Work from Office</option>
+                <option value="Work from Home">Work from Home</option>
                 <option value="Hybrid">Hybrid</option>
-            </select>
-            <select className="form-select mb-3" aria-label="Default select example" name='workType' id='work-type' defaultValue="Select work type">
-                <option disabled >Select work type</option>
-                <option value="1">Part Time</option>
-                <option value="2">Full Time</option>
-            </select>
-            <div className="form-floating mb-3">
-                <input type="text" className="form-control" name="salary" placeholder="Salary"/>
-                <label htmlFor="salary">Salary</label>
+              </select>
+            </div>
+            <div className="input-group mb-3">
+              <label className="input-group-text grey-bg" for="inputGroupSelect01">Work Type</label>
+              <select className="form-select" id="inputGroupSelect01" name='jobType'>
+              <option selected value="Part Time">Part Time</option>
+                <option value="Full Time">Full Time</option>
+                <option value="Performance based FTE">Performance based FTE</option>
+              </select>
+            </div>
+            <div className="input-group mb-3">
+              <label className="input-group-text grey-bg" for="inputGroupSelect01">Job Scope</label>
+              <select className="form-select" id="inputGroupSelect01" name='jobScope'>
+                <option selected value="Small">Small</option>
+                <option value="Medium">Medium</option>
+                <option value="Large">Large</option>
+              </select>
+            </div>
+            <div className="input-group mb-3">
+              <label className="input-group-text grey-bg" for="inputGroupSelect01">Required Experience</label>
+              <select className="form-select" id="inputGroupSelect01" name='experience'>
+              <option selected value="Fresher (0-2 years)">Fresher (0-2 years)</option>
+                <option value="Intermediate (2-5 years)">Intermediate (2-5 years)</option>
+                <option value="Expert (5+ years)">Expert (5+ years)</option>
+              </select>
+            </div>
+            <div className="input-group mb-3">
+              <label className="input-group-text grey-bg" for="inputGroupSelect01">Salary type</label>
+              <select className="form-select" id="inputGroupSelect01" name='salaryType'> 
+                <option selected value="Hourly rate (/hr)">Hourly rate (/hr)</option>
+                <option value="Fixed price">Fixed price</option>
+              </select>
             </div>
             <div className="form-floating mb-3">
-                <textarea className="form-control" name="jodDescription" placeholder="Job Description" id="floatingTextarea2" style={{height: '200px'}} required></textarea>
+                <input type="text" className="form-control" name="salary" placeholder="Salary (INR)" required/>
+                <label htmlFor="salary">Salary (INR)</label>
+            </div>
+            <div className="form-floating mb-3">
+                <textarea className="form-control" name="description" placeholder="Job Description" id="floatingTextarea2" style={{height: '150px'}} required></textarea>
                 <label htmlFor="floatingTextarea2">Job Description</label>
             </div>
             <div className="form-floating mb-3">
-                <textarea className="form-control" name="keyResponsibilites" 
-                placeholder="Key Responsibilties" id="floatingTextarea2" style={{height: '100px'}}></textarea>
-                <label htmlFor="floatingTextarea2">Key Responsibilties</label>
+                <textarea className="form-control" name="skills" 
+                placeholder="Skills Required" id="floatingTextarea2" style={{height: '50px'}}></textarea>
+                <label htmlFor="floatingTextarea2">Skills Required (Comma seperated)</label>
             </div>
           <div className="d-flex flex-row justify-content-end">
-          <button className="btn btn-secondary me-3" onClick={handleCloseForm}>
+          <button className="btn btn-secondary me-3" onClick={handleCloseForm}> 
             Close
           </button>
           <button className="btn btn-primary me-3" type='submit'>

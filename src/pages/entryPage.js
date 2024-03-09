@@ -36,7 +36,6 @@ function EntryPage() {
     
     const navigate = useNavigate();
 
-
     const sendAck = (message , type) => {
         setAckMessage(message);
         setAckType(type);
@@ -52,9 +51,9 @@ function EntryPage() {
         axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/login`, data)
         .then((response) => {
             localStorage.setItem('jwt', response.data.token);
-            sendAck('Logged in successfully', ACK_TYPE.SUCCESS);
             window.location.href = '/home';
         }).catch((error) => {
+            console.log(error);
             sendAck(error.response.data, ACK_TYPE.ERROR);
         });
     }

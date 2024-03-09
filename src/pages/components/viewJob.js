@@ -9,38 +9,55 @@ function ViewJob({ job , show , handleClose}) {
             </Modal.Header>
             <Modal.Body>
                 <form>
-                    <div className="form-floating mb-3">
-                        <input type="text" className="form-control border-0" placeholder="Company" value={job.company} readonly />
-                        <label htmlFor="company-name">Company</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                        <input type="text" className="form-control border-0" placeholder="Job Role" value={job.title} readonly />
-                        <label htmlFor="job-role">Job Role</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                        <input type="text" className="form-control border-0"  placeholder="Job Location" value={job.location} readonly />
-                        <label htmlFor="job-location">Job Location</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                        <input type="text" className="form-control border-0" placeholder="Work Mode" value={job.workMode} readonly />
-                        <label htmlFor="job-location">Work Mode</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                        <input type="text" className="form-control border-0" placeholder="Work Type" value={job.workType} readonly />
-                        <label htmlFor="job-location">Work Type</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                        <input type="text" className="form-control border-0" placeholder="Salary" value={job.salary} readonly />
-                        <label htmlFor="salary">Salary</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                        <textarea className="form-control border-0" name="jodDescription" placeholder="Job Description" id="floatingTextarea2" ref={(textarea) => { if (textarea) { textarea.style.height = `${textarea.scrollHeight}px`; } }} readonly>{job.description}</textarea>
-                        <label htmlFor="floatingTextarea2">Job Description</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                        <textarea className="form-control border-0" name="keyResponsibilites" placeholder="Key Responsibilities" id="floatingTextarea2" readonly ref={(textarea) => { if (textarea) { textarea.style.height = `${textarea.scrollHeight}px`; } }}>{job.keyResponsibilites}</textarea>
-                        <label htmlFor="floatingTextarea2">Key Responsibilities</label>
-                    </div>
+                <div className="form-floating mb-3">
+                    <input type = "hidden" name="company"/>
+                    <input type="text" className="form-control" value={job.companyName} readOnly/>
+                    <label htmlFor="company-name">Company Name</label>
+                </div>
+                <div className="form-floating mb-3">
+                    <input type="text" className="form-control" value={job.jobTitle} readOnly/>
+                    <label htmlFor="job-role">Job Role</label>
+                </div>
+                <div className="input-group mb-3">
+                <label className="input-group-text grey-bg" for="inputGroupSelect01">Work Mode</label>
+                    <input className="form-select" id="inputGroupSelect01" value={job.jobMode} readOnly></input>
+                </div>
+                <div className="input-group mb-3">
+                <label className="input-group-text grey-bg" for="inputGroupSelect01">Work Type</label>
+                    <input className="form-select" id="inputGroupSelect01" value={job.jobType} readOnly></input>
+                </div>
+                <div className="input-group mb-3">
+                <label className="input-group-text grey-bg" for="inputGroupSelect01">Job Scope</label>
+                    <input className="form-select" id="inputGroupSelect01" value={job.jobScope} readOnly></input>
+                </div>
+                <div className="input-group mb-3">
+                <label className="input-group-text grey-bg" for="inputGroupSelect01">Required Experience</label>
+                    <input className="form-select" id="inputGroupSelect01" value={job.jobExperience} readOnly></input>
+                </div>
+                <div className="input-group mb-3">
+                <label className="input-group-text grey-bg" for="inputGroupSelect01">Salary type</label>
+                    <input className="form-select" id="inputGroupSelect01" value={job.salaryType} readOnly></input>
+                </div>
+                <div className="form-floating mb-3">
+                    <input type="text" className="form-control"value ={job.jobSalary}  readOnly/>
+                    <label htmlFor="salary">Salary (INR)</label>
+                </div>
+                <div className="form-floating mb-3">
+                    <textarea className="form-control"  value={job.jobDescription} id="floatingTextarea2" ref={(textarea) => { if (textarea) { textarea.style.height = `${textarea.scrollHeight}px`;}}} readOnly></textarea>
+                    <label htmlFor="floatingTextarea2">Job Description</label>
+                </div>
+                <div className="form-floating mb-3">
+                    <textarea className="form-control" value={job.jobSkills} id="floatingTextarea2" ref={(textarea) => { if (textarea) { textarea.style.height = `${textarea.scrollHeight}px`; } }} readOnly>
+
+                    </textarea>
+                    <label htmlFor="floatingTextarea2">Skills Required</label>
+                </div>
+                    {/* <label htmlFor="floatingTextarea2 ml">Skills Required (Comma seperated)</label>
+                <div className="form-floating mb-3">
+                    <span class="badge text-bg-secondary mx-2">Secondary</span>
+                    <span class="badge text-bg-secondary mx-2">Secondary</span>
+                    <span class="badge text-bg-secondary mx-2">Secondary</span>
+                </div> */}
                     <div className="d-flex flex-row justify-content-end">
                         <button className="btn btn-primary me-3">
                             View applicants

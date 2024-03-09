@@ -9,66 +9,17 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import checkJwt from '../helpers/jwt';
 
-const INITIAL_SORT_STATE = 0;
-
 const ACK_TYPE = {
   SUCCESS : 'success',
   ERROR : 'danger',
   WARNING : 'warning'
 }
 
-// retrieve jobs from the database
-const jobs = [
-  {
-    title: 'Software Developer',
-    location: 'Bangalore',
-    workType: 'Full Time',
-    workMode: 'Work from Office',
-    salary: '10LPA',
-    description: 'Develop software',
-    keyResponsibilites: 'Develop software',
-    datePosted: 'Thu Jun 24 2021',
-    company: 'Microsoft'
-  },
-  {
-    title: 'Software Developer',
-    location: 'Bangalore',
-    workType: 'Full Time',
-    workMode: 'Work from Office',
-    salary: '10LPA',
-    description: 'Develop software',
-    keyResponsibilites: 'Develop software',
-    datePosted: 'Thu Jun 24 2021',
-    company: 'Microsoft'
-  },
-  {
-    title: 'Software Engineer',
-    location: 'Chennai',
-    workType: 'Full Time',
-    workMode: 'Work from Office',
-    salary: '12LPA',
-    description: 'Develop app',
-    keyResponsibilites: 'Develop app',
-    datePosted: 'Thu Jun 24 2022',
-    company: 'Google'
-  },
-  {
-    title: 'System Engineer',
-    location: 'Vizag',
-    workType: 'Full Time',
-    workMode: 'Work from Office',
-    salary: '12LPA',
-    description: 'Develop app',
-    keyResponsibilites: 'Develop app',
-    datePosted: 'Thu Jan 14 2014',
-    company: 'IBM'
-  }
-]
-
 function HomePage() {
-  const [jobList, setJobList] = useState(jobs);
-  const [originalJobList, setOriginalJobList] = useState(jobs);
-  const [sortState , setSortState] = useState(INITIAL_SORT_STATE);
+
+  const [originalJobList, setOriginalJobList] = useState([]);
+  const [jobList, setJobList] = useState([]);
+  const [sortState , setSortState] = useState(process.env.REACT_APP_INITIAL_SORT_STATE);
   const [showAck, setShowAck] = useState(false);
   const [ackMessage, setAckMessage] = useState('');
   const [ackType, setAckType] = useState('');
@@ -79,79 +30,78 @@ function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-      checkJwt().then((isJwtValid) => {
-          if(!isJwtValid) {
-            navigate('/entry');
-          }
-          else{
-            const jwtToken = localStorage.getItem('jwt');
-            axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
-          }
+    checkJwt().then(async(isJwtValid) => {
+      if(!isJwtValid) {
+        navigate('/entry');
       }
-      );
-  });
+      await onLoad();
+    });
+  },[]);
+    
 
   const onLoad = async() => {
-    try{
-      const jobs = await axios.get('http://localhost:8000/job/getjobs');
-      setJobList(jobs.data);
-      setOriginalJobList(jobs.data);
-    }
-    catch(error){
-      console.log(error);
-    }
-  }
-
-  const temp = () =>{
-    axios.post('http://localhost:8000/job/add')
+    axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/myjobs`)
     .then((response) => {
-      console.log(response);
+      setOriginalJobList(response.data);
+      setJobList(response.data);
     })
     .catch((error) => {
       console.log(error);
+      sendAck('Error fetching jobs', ACK_TYPE.ERROR);
     });
   }
+
 
   const sendAck = async(message , type) => {
     setAckMessage(message);
     setAckType(type);
     handleShowAck();
   }
-
-  const getJob = (jobData) => {
-    const newJob = {
-      title: jobData.jobRole,
-      location: jobData.jobLocation,
-      workType: jobData.workType === undefined ? 'Not disclosed' : jobData.workType,
-      workMode : jobData.workMode === undefined ? 'Not disclosed' : jobData.workMode,
-      salary: jobData.salary === undefined ? 'Not disclosed' : jobData.salary,
-      description: jobData.jodDescription,
-      keyResponsibilites: jobData.keyResponsibilites === "" ? 'Not disclosed' : jobData.keyResponsibilites,
-      datePosted: new Date().toDateString(),
-      company : jobData.company
+  
+  const addJob = async (event , handleClose) =>{
+    const getJob = (jobData) => {
+  
+      const newJob = {
+        companyName: jobData.companyName,
+        jobTitle: jobData.jobRole,
+        jobType: jobData.jobType,
+        jobSalary: jobData.salary,
+        jobMode: jobData.workMode,
+        jobScope : jobData.jobScope,
+        jobExperience : jobData.experience,
+        salaryType : jobData.salaryType,
+        jobDescription : jobData.description,
+        jobSkills : jobData.skills ? jobData.skills.split(',').map(skill => skill.trim()) : [],
+      }
+      return newJob;
     }
-    return newJob;
-  }
-
-  const addJob = (event , handleClose) =>{
     const formData =  new FormData(event.target)
     const data = Object.fromEntries(formData.entries())
     const newJob = getJob(data);
 
+    $('#search-bar').val('');
+    
     axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/add`, newJob)
-    .then((response) => {
+    .then(async(response) => {
       sendAck('Job added successfully' , ACK_TYPE.SUCCESS);
+      handleClose();
+      await onLoad();
     })
     .catch((error) => {
       sendAck(error.response.data, ACK_TYPE.ERROR);
     });
-
-    handleClose()
   }
   
-  const deleteJob = (index) => {
-    const newJobList = jobList.filter((job, i) => i !== index);
-    setJobList(newJobList);
+  const deleteJob = async(jobId) => {
+    axios.delete(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/delete/${jobId}`)
+    .then(async(response) => {
+        $('#search-bar').val('');
+        sendAck('Job deleted successfully', ACK_TYPE.SUCCESS);
+        await onLoad();
+      })
+      .catch((error) => {
+        sendAck(error.response.data, ACK_TYPE.ERROR);
+      });
   }
 
   const sortJobs = (index) => {
@@ -164,10 +114,10 @@ function HomePage() {
       newJobList = jobList.sort((a, b) => new Date(a.datePosted) - new Date(b.datePosted));
     }
     else if(index === 2){
-      newJobList = jobList.sort((a, b) => a.title.localeCompare(b.title));
+      newJobList = jobList.sort((a, b) => a.jobTitle.localeCompare(b.jobTitle));
     }
     else if(index === 3){
-      newJobList = jobList.sort((a, b) => b.title.localeCompare(a.title));
+      newJobList = jobList.sort((a, b) => b.jobTitle.localeCompare(a.jobTitle));
     }
     setSortState(index);
     $('#' + index).addClass('active');
@@ -175,36 +125,32 @@ function HomePage() {
   }
 
   const searchJob = () => {
-    const searchValue = $('#search-bar').val().toLowerCase();
+    let searchValue = $('#search-bar').val();
     if(searchValue === ''){
       setJobList(originalJobList);
       return;
     }
-    const newJobList = originalJobList.filter((job) => job.title.toLowerCase().includes(searchValue) || job.location.toLowerCase().includes(searchValue)) ;
+    searchValue = searchValue.toLowerCase();
+    const newJobList = originalJobList.filter((job) => job.jobTitle.toLowerCase().includes(searchValue)) ;
     setJobList(newJobList);
   }
-
-  useEffect(() => {
-    sortJobs(sortState);
-    searchJob();
-  },[originalJobList]);
 
   return (
     <div className='home-page'>
       <Header />
       <AddJobForm addjobform={addJob}/>
       <AckModal message = {ackMessage} ackType = {ackType} showAck = {showAck} handleCloseAck = {handleCloseAck}/>
-      <h1 onClick={temp}>Jobs Posted by You</h1>
+      <h1>Jobs Posted by You</h1>
       <div className='home-page-header'>
         <div className ="dropdown">
           <button className ="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             Sort by
           </button>
           <ul className ="dropdown-menu dropdown-menu-dark">
-            <li><a id='0' className ="dropdown-item active" onClick={() => sortJobs(0)} href="#">Date latest</a></li>
-            <li><a id='1' className ="dropdown-item" onClick={() => sortJobs(1)} href="#">Date oldest</a></li>
-            <li><a id='2' className ="dropdown-item" onClick={() => sortJobs(2)} href="#">Role ascending</a></li>
-            <li><a id='3' className ="dropdown-item" onClick={() => sortJobs(3)} href="#">Role descending</a></li>
+            <li><a id='0' className ="dropdown-item active" onClick={() => sortJobs(0)} >Date latest</a></li>
+            <li><a id='1' className ="dropdown-item" onClick={() => sortJobs(1)} >Date oldest</a></li>
+            <li><a id='2' className ="dropdown-item" onClick={() => sortJobs(2)} >Role ascending</a></li>
+            <li><a id='3' className ="dropdown-item" onClick={() => sortJobs(3)} >Role descending</a></li>
           </ul>
         </div>
         <form className="d-flex" role="search">
@@ -212,7 +158,7 @@ function HomePage() {
             id='search-bar'
             className="form-control"
             type="search"
-            placeholder="Search by Job title/Location"
+            placeholder="Search by Job title"
             aria-label="Search"
             onChange={searchJob}
           />
@@ -227,5 +173,3 @@ function HomePage() {
 }
 
 export default HomePage;
-
-// set default sort as date latest
