@@ -52,13 +52,10 @@ function ViewJob({ job , show , handleClose}) {
                     </textarea>
                     <label htmlFor="floatingTextarea2">Skills Required</label>
                 </div>
-                    {/* <label htmlFor="floatingTextarea2 ml">Skills Required (Comma seperated)</label>
-                <div className="form-floating mb-3">
-                    <span class="badge text-bg-secondary mx-2">Secondary</span>
-                    <span class="badge text-bg-secondary mx-2">Secondary</span>
-                    <span class="badge text-bg-secondary mx-2">Secondary</span>
-                </div> */}
                     <div className="d-flex flex-row justify-content-end">
+                        <button className="btn btn-success me-3">
+                            Hire Talent
+                        </button>
                         <button className="btn btn-primary me-3">
                             View applicants
                         </button>

@@ -51,7 +51,6 @@ function HomePage() {
     });
   }
 
-
   const sendAck = async(message , type) => {
     setAckMessage(message);
     setAckType(type);
