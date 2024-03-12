@@ -1,10 +1,9 @@
 import '../styles/entryPage.css'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import Header from './components/baseHeader';
 import loginImg from '../assets/img/entry_page.png'
 import signupImg from '../assets/img/signup_page.png'
 import axios from 'axios';
-import { useEffect } from 'react';
 import checkJwt from '../helpers/jwt';
 import AckModal from './components/ackModal';
 import { useNavigate } from 'react-router-dom';
@@ -114,7 +113,7 @@ function EntryPage() {
                                 <a href="#">Forgot password?</a>
                                 </div>
                                 <div className="button input-box">
-                                <input type="submit" defaultValue="Sumbit" />
+                                <input type="submit" defaultValue="Submit" />
                                 </div>
                                 <div className="text sign-up-text">
                                 Don't have an account? <label htmlFor="flip" onClick={toggle}>Sigup now</label>

@@ -1,0 +1,79 @@
+.profile-list{
+  background-color: aliceblue;
+  width: 900px;
+  max-height: 250px;
+  border-radius: 10px;
+  padding: 20px;
+  display:flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.buttons-div{
+  width : 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100%;
+}
+
+.first-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profile-card{
+  width: 80%;
+  max-height: 210px;
+}
+.title-div{
+  margin-left: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.user-name , .user-title{
+  margin : 0;
+}
+
+.profile-pic{
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.second-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.third-row{
+  max-height: 72px;
+  overflow: hidden;
+}
+
+.title{
+  color: white;
+} 
+
+.user-name{
+  font-style: italic;
+}
+
+.name , .description{
+  margin: 0;
+}
+
+a{
+  color: white;
+  text-decoration: none;
+}

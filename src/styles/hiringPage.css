@@ -1,0 +1,27 @@
+.hiring-main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}   
+
+.hiring-main-div{
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.filter-div{
+    height: 90vh;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 50px;
+}
+
+.list-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

@@ -1,35 +1,24 @@
-import {useState} from 'react';
 import {Modal} from 'react-bootstrap';
-import AckModal from './ackModal';
-import '../../styles/components/addJobForm.css';
+import '../../styles/components/inviteForm.css';
 
-function AddJobForm({addjobform}) {
-
-  const [showForm, setShowForm] = useState(false);
-  const handleCloseForm = () => setShowForm(false);
-  const handleShowForm = () => setShowForm(true);
-  
-  const [showAck, setShowAck] = useState(false);
-  const handleCloseAck = () => setShowAck(false);
-  const handleShowAck = () => setShowAck(true);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    addjobform(event , handleCloseForm , handleShowAck);
-  }
-
+function InviteForm( {invitee , inviter, showForm, handleCloseForm, handleSubmit} ) {
   return (
-    <>
-      <div className="floating-icon" onClick={handleShowForm}>
-        <h1>+</h1>
-      </div>
-
-      <Modal show={showForm} onHide={handleCloseForm} size='lg' backdrop="static">
+    <Modal show={showForm} onHide={handleCloseForm} size='lg' backdrop="static">
         <Modal.Header closeButton>
-          <Modal.Title>Create a new job</Modal.Title>
+          <Modal.Title>Invite Freelancer for the job</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <form onSubmit={(event) => handleSubmit(event)}>
+        <form onSubmit={(event) => handleSubmit(event , invitee , inviter)}>
+            <div className="form-floating mb-3">
+                <input type = "hidden" name="company"/>
+                <input type="text" className="form-control" value={invitee.username} disabled/>
+                <label htmlFor="company-name">Invitee Name</label>
+            </div>
+            <div className="form-floating mb-3">
+                <input type = "hidden" name="company"/>
+                <input type="text" className="form-control" value={inviter.username} disabled/>
+                <label htmlFor="company-name">Inviter Name</label>
+            </div>
             <div className="form-floating mb-3">
                 <input type = "hidden" name="company"/>
                 <input type="text" className="form-control" name= "companyName" placeholder="Company Name" required/>
@@ -64,14 +53,6 @@ function AddJobForm({addjobform}) {
               </select>
             </div>
             <div className="input-group mb-3">
-              <label className="input-group-text grey-bg" for="inputGroupSelect01">Required Experience</label>
-              <select className="form-select" id="inputGroupSelect01" name='experience'>
-              <option selected value="Fresher (0-2 years)">Fresher (0-2 years)</option>
-                <option value="Intermediate (2-5 years)">Intermediate (2-5 years)</option>
-                <option value="Expert (5+ years)">Expert (5+ years)</option>
-              </select>
-            </div>
-            <div className="input-group mb-3">
               <label className="input-group-text grey-bg" for="inputGroupSelect01">Salary type</label>
               <select className="form-select" id="inputGroupSelect01" name='salaryType'> 
                 <option selected value="Hourly rate (/hr)">Hourly rate (/hr)</option>
@@ -84,29 +65,22 @@ function AddJobForm({addjobform}) {
             </div>
             <div className="form-floating mb-3">
                 <textarea className="form-control" name="description" placeholder="Job Description" id="floatingTextarea2" style={{height: '150px'}} required></textarea>
-                <label htmlFor="floatingTextarea2">Job Description</label>
-            </div>
-            <div className="form-floating mb-3">
-                <textarea className="form-control" name="skills" 
-                placeholder="Skills Required" id="floatingTextarea2" style={{height: '50px'}}></textarea>
-                <label htmlFor="floatingTextarea2">Skills Required (Comma seperated)</label>
+                <label htmlFor="floatingTextarea2">Work Description</label>
             </div>
           <div className="d-flex flex-row justify-content-end">
           <button className="btn btn-secondary me-3" onClick={handleCloseForm}> 
             Close
           </button>
-          <button className="btn btn-primary me-3" type='submit'>
-            Submit
+          <button className="btn btn-success me-3" type='submit'>
+            Send Invite
           </button>
           </div>
         </form> 
         </Modal.Body>
-      </Modal>
-      <AckModal message='Job added successfully' handleCloseAck={handleCloseAck} showAck={showAck} ackType='success'/>      
-    </>
+    </Modal>    
   );
 }
 
-export default AddJobForm;
+export default InviteForm;
 
 //TODO: JD should be min 200 characters length

@@ -1,7 +1,7 @@
 import logo from '../../assets/img/logo.png'
 import '../../styles/components/baseHeader.css'
 
-function baseHeader() {
+function BaseHeader() {
     return (
         <header className = "base-header" >
             <img src={logo} className ="base-header-logo"></img>
@@ -9,4 +9,4 @@ function baseHeader() {
     );
 }
 
-export default baseHeader;
+export default BaseHeader;

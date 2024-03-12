@@ -6,11 +6,13 @@ import HomePage from "./pages/homePage";
 import '../node_modules/bootstrap/dist/css/bootstrap.css'
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
+import HiringPage from "./pages/hiringPage.js";
+
 
 function App() {
   return (
     <>
-      <Helmet>
+      {/* <Helmet>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
       </Helmet>
       <Router>
@@ -19,7 +21,8 @@ function App() {
           <Route path="/entry" element={<EntryPage />} />
           <Route path="/home" element={<HomePage /> } />
         </Routes>
-      </Router>
+      </Router> */}
+      <HiringPage />
     </>
   );
 }

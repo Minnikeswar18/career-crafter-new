@@ -16,7 +16,6 @@ const ACK_TYPE = {
 }
 
 function HomePage() {
-
   const [originalJobList, setOriginalJobList] = useState([]);
   const [jobList, setJobList] = useState([]);
   const [sortState , setSortState] = useState(process.env.REACT_APP_INITIAL_SORT_STATE);
@@ -37,7 +36,6 @@ function HomePage() {
       await onLoad();
     });
   },[]);
-    
 
   const onLoad = async() => {
     axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/myjobs`)
