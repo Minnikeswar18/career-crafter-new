@@ -1,4 +1,6 @@
 import { Modal } from "react-bootstrap";
+import '../../styles/components/viewJob.css';
+import Tag from "./tag";
 
 function ViewJob({ job , show , handleClose}) {
 
@@ -46,16 +48,24 @@ function ViewJob({ job , show , handleClose}) {
                     <textarea className="form-control"  value={job.jobDescription} id="floatingTextarea2" ref={(textarea) => { if (textarea) { textarea.style.height = `${textarea.scrollHeight}px`;}}} readOnly></textarea>
                     <label htmlFor="floatingTextarea2">Job Description</label>
                 </div>
-                <div className="form-floating mb-3">
-                    <textarea className="form-control" value={job.jobSkills} id="floatingTextarea2" ref={(textarea) => { if (textarea) { textarea.style.height = `${textarea.scrollHeight}px`; } }} readOnly>
-
-                    </textarea>
-                    <label htmlFor="floatingTextarea2">Skills Required</label>
-                </div>
+                {/* {console.log(job.jobSkills.length + 1)} */}
+                {job.jobSkills.length === 0 ?
+                    <div className="form-floating mb-3">
+                        <textarea className="form-control" value={"Not Disclosed"} id="floatingTextarea2" ref={(textarea) => { if (textarea) { textarea.style.height = `${textarea.scrollHeight}px`; } }} readOnly>
+                        </textarea>
+                        <label htmlFor="floatingTextarea2">Skills Required</label>
+                    </div> 
+                    :
+                    <div className="skills-div mb-3">
+                        <label className="skills-label ps-3 mb-2 fw-light">Skills required</label>
+                        <div className="d-flex flex-row flex-wrap">
+                            {job.jobSkills.map((skill, index) => {
+                                return <Tag key={index} content={skill} />
+                            })}
+                        </div>
+                    </div>
+                }
                     <div className="d-flex flex-row justify-content-end">
-                        <button className="btn btn-success me-3">
-                            Hire Talent
-                        </button>
                         <button className="btn btn-primary me-3">
                             View applicants
                         </button>

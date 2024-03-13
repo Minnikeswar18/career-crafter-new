@@ -3,17 +3,11 @@ import Header from './components/baseHeader';
 import JobElement from './components/jobListElement'
 import { useEffect, useState } from 'react';
 import AddJobForm from './components/addJobForm';
-import AckModal from './components/ackModal';
+import {AckModal , ACK_TYPE} from './components/ackModal';
 import $ from 'jquery';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import checkJwt from '../helpers/jwt';
-
-const ACK_TYPE = {
-  SUCCESS : 'success',
-  ERROR : 'danger',
-  WARNING : 'warning'
-}
 
 function HomePage() {
   const [originalJobList, setOriginalJobList] = useState([]);

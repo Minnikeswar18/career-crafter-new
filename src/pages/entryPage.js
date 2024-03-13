@@ -4,15 +4,9 @@ import loginImg from '../assets/img/entry_page.png'
 import signupImg from '../assets/img/signup_page.png'
 import axios from 'axios';
 import checkJwt from '../helpers/jwt';
-import AckModal from './components/ackModal';
+import {AckModal , ACK_TYPE} from './components/ackModal';
 import { useNavigate } from 'react-router-dom';
 import LogoHeader from './components/logoHeader';
-
-const ACK_TYPE = {
-    SUCCESS : 'success',
-    ERROR : 'danger',
-    WARNING : 'warning'
-}
 
 function EntryPage() {
 

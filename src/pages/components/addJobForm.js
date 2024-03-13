@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {Modal} from 'react-bootstrap';
-import AckModal from './ackModal';
+import {AckModal} from './ackModal';
 import '../../styles/components/addJobForm.css';
 
 function AddJobForm({addjobform}) {

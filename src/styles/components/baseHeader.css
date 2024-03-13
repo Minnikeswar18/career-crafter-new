@@ -5,5 +5,7 @@
 
 .navbar{
     width: 100%;
-    opacity: 1;
+    position: sticky !important;
+    z-index: 1000;
+    top: 0;
 }

@@ -73,7 +73,7 @@
   margin: 0;
 }
 
-a{
-  color: white;
-  text-decoration: none;
+.profile-link{
+  color: white !important;
+  text-decoration: none !important;
 }
