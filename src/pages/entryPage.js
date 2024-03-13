@@ -1,12 +1,12 @@
 import '../styles/entryPage.css'
 import { useState,useEffect } from 'react'
-import Header from './components/baseHeader';
 import loginImg from '../assets/img/entry_page.png'
 import signupImg from '../assets/img/signup_page.png'
 import axios from 'axios';
 import checkJwt from '../helpers/jwt';
 import AckModal from './components/ackModal';
 import { useNavigate } from 'react-router-dom';
+import LogoHeader from './components/logoHeader';
 
 const ACK_TYPE = {
     SUCCESS : 'success',
@@ -81,7 +81,7 @@ function EntryPage() {
     return (
         <div className="entry-page">
             <AckModal showAck={showAck} message={ackMessage} ackType={ackType} handleCloseAck ={handleCloseAck}/>
-            <Header/>
+            <LogoHeader />
             <div className="entry-content">
                 <div className="container">
                     <input type="checkbox" id="flip" />

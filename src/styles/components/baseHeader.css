@@ -1,15 +1,9 @@
-.base-header{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    margin-top: 0;
+.home-button , .people-button , .jobs-button{
+    color: azure !important;
+    font-size: larger !important;
 }
-.base-header-logo{
-    width: 40vh;
-}
-@media screen and (max-width: 600px){
-    .base-header-logo{
-        width: 35vh;
-    }
+
+.navbar{
+    width: 100%;
+    opacity: 1;
 }

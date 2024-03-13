@@ -1,14 +1,15 @@
 import '../styles/landingPage.css';
 import img from '../assets/img/landing_page.png'
-import BaseHeader from './components/baseHeader'
+
 import { useNavigate } from 'react-router-dom';
+import LogoHeader from './components/logoHeader';
 
 function LandingPage() {
   const navigate = useNavigate();
 
   return (
     <div className="landing-page">
-        <BaseHeader/>
+        <LogoHeader />
         <div className="landing-content">
             <div className="landing-text"> 
                 <h2> Welcome to Career Crafter</h2>
