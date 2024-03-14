@@ -11,6 +11,7 @@ import {AckModal , ACK_TYPE} from './components/ackModal';
 import checkJwt from '../helpers/jwt';
 
 import '../styles/hiringPage.css';
+import Loader from './components/loader';
 
 function HiringPage(){
   const [filteredProfiles, setFilteredProfiles] = useState([]);
@@ -21,6 +22,7 @@ function HiringPage(){
   const [ackType, setAckType] = useState('');
   const [invitee, setInvitee] = useState({});
   const [inviter, setInviter] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const handleCloseForm = () => setShowForm(false);
   const handleShowForm = () => setShowForm(true);
@@ -35,6 +37,7 @@ function HiringPage(){
       const allProfiles = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/getFreelancers`);
       setProfiles(allProfiles.data);
       setFilteredProfiles(allProfiles.data);
+      setTimeout(()=> setLoading(false) , 1000);
     }
     catch(error){
       sendAck(ACK_TYPE.ERROR, 'Error fetching profiles');
@@ -88,6 +91,8 @@ function HiringPage(){
 
     const formData =  new FormData(event.target)
     const data = Object.fromEntries(formData.entries())
+    data.inviteeEmail = invitee.email;
+    data.inviteeUsername = invitee.username;
     try{
       await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/invite`, {invitee, invitation : data});
       handleCloseForm();
@@ -104,12 +109,16 @@ function HiringPage(){
     handleShowAck();
   }
 
+  if(loading){
+    return <Loader />
+  }
+
   return(
     <div className='hiring-main'>
         <AckModal showAck={showAck} handleCloseAck={handleCloseAck} ackType={ackType} message = {ackMessage} />
         <BaseHeader />
         <InviteForm invitee={invitee} inviter={inviter} showForm = {showForm} handleCloseForm={handleCloseForm} handleSubmit={handleInvite}/>
-        <h1 className='title my-4'>Discover Freelancers</h1>
+        <h1 className='title mt-4 mb-5'>Discover Freelancers</h1>
         <div className="hiring-main-div">
             <div className='filter-div'>
                 <form className="d-flex mb-4" role="search">

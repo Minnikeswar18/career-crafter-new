@@ -5,6 +5,7 @@ import LandingPage from "./pages/landingPage";
 import EntryPage from "./pages/entryPage";
 import HomePage from "./pages/homePage";
 import HiringPage from "./pages/hiringPage.js";
+import MyHiringPage from "./pages/myHiringPage.js";
 
 import '../node_modules/bootstrap/dist/css/bootstrap.css'
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -22,6 +23,8 @@ function App() {
           <Route path="/entry" element={<EntryPage />} />
           <Route path="/home" element={<HomePage /> } />
           <Route path="/hire" element={<HiringPage />} />
+          <Route path="/myhirings" element={<MyHiringPage/>} />
+
         </Routes>
       </Router>
     </>

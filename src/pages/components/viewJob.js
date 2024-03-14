@@ -48,7 +48,6 @@ function ViewJob({ job , show , handleClose}) {
                     <textarea className="form-control"  value={job.jobDescription} id="floatingTextarea2" ref={(textarea) => { if (textarea) { textarea.style.height = `${textarea.scrollHeight}px`;}}} readOnly></textarea>
                     <label htmlFor="floatingTextarea2">Job Description</label>
                 </div>
-                {/* {console.log(job.jobSkills.length + 1)} */}
                 {job.jobSkills.length === 0 ?
                     <div className="form-floating mb-3">
                         <textarea className="form-control" value={"Not Disclosed"} id="floatingTextarea2" ref={(textarea) => { if (textarea) { textarea.style.height = `${textarea.scrollHeight}px`; } }} readOnly>

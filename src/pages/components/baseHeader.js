@@ -44,8 +44,8 @@ function BaseHeader() {
                         </a>
                         </li>
                         <li>
-                        <a className="dropdown-item" href="/">
-                            My Hirings
+                        <a className="dropdown-item" href="/myhirings">
+                            My Hirings & Invites
                         </a>
                         </li>
                     </ul>

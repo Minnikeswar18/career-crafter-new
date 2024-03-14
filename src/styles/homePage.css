@@ -13,6 +13,10 @@
     height: 100vh;
 }
 
+body h1{
+    padding: 0 !important;
+}
+
 .home-page h1{
     color: white;
     margin: 20px auto;

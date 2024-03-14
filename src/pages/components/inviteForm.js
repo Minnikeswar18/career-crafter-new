@@ -11,11 +11,11 @@ function InviteForm( {invitee , inviter, showForm, handleCloseForm, handleSubmit
         <form onSubmit={(event) => handleSubmit(event , invitee)}>
             <div className="form-floating mb-3">
                 <input type="text" className="form-control" value={invitee.username} disabled/>
-                <label htmlFor="company-name">Invitee Name</label>
+                <label htmlFor="company-name">Invitee</label>
             </div>
             <div className="form-floating mb-3">
                 <input type="text" className="form-control" value={inviter.username} disabled/>
-                <label htmlFor="company-name">Inviter Name</label>
+                <label htmlFor="company-name">Inviter</label>
             </div>
             <div className="form-floating mb-3">
                 <input type="text" className="form-control" name= "companyName" placeholder="Company Name" required/>

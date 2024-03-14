@@ -8,6 +8,7 @@ import $ from 'jquery';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import checkJwt from '../helpers/jwt';
+import Loader from './components/loader';
 
 function HomePage() {
   const [originalJobList, setOriginalJobList] = useState([]);
@@ -16,6 +17,8 @@ function HomePage() {
   const [showAck, setShowAck] = useState(false);
   const [ackMessage, setAckMessage] = useState('');
   const [ackType, setAckType] = useState('');
+
+  const [loading , setLoading] = useState(true);
   
   const handleCloseAck = () => setShowAck(false);
   const handleShowAck = () => setShowAck(true);
@@ -36,6 +39,7 @@ function HomePage() {
     .then((response) => {
       setOriginalJobList(response.data);
       setJobList(response.data);
+      setTimeout(()=> setLoading(false) , 1000);
     })
     .catch((error) => {
       console.log(error);
@@ -124,6 +128,10 @@ function HomePage() {
     searchValue = searchValue.toLowerCase();
     const newJobList = originalJobList.filter((job) => job.jobTitle.toLowerCase().includes(searchValue)) ;
     setJobList(newJobList);
+  }
+
+  if(loading){
+    return <Loader/>
   }
 
   return (
