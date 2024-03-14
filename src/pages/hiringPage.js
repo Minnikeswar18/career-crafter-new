@@ -9,9 +9,9 @@ import ProfileList from './components/profileList';
 import InviteForm from './components/inviteForm';
 import {AckModal , ACK_TYPE} from './components/ackModal';
 import checkJwt from '../helpers/jwt';
+import Loader from './components/loader';
 
 import '../styles/hiringPage.css';
-import Loader from './components/loader';
 
 function HiringPage(){
   const [filteredProfiles, setFilteredProfiles] = useState([]);
