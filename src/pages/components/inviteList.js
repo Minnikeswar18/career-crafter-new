@@ -4,7 +4,6 @@ import {useState} from 'react';
 
 function InviteList({invitation , deleteInvitation}) {
     const[showInvite, setShowInvite] = useState(false);
-
     const handleShowInvite = () => setShowInvite(true);
     const handleCloseInvite = (event) =>{
         if(event) event.preventDefault();
@@ -21,7 +20,7 @@ function InviteList({invitation , deleteInvitation}) {
     }
 
   return (
-    <div className='invite-element'>
+    <div className='invite-element shadow'>
         <ViewInvite show={showInvite} handleClose={handleCloseInvite} invitation={invitation}/>
         <div className="main-div">
             <h1 className="main-top">

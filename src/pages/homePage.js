@@ -39,10 +39,9 @@ function HomePage() {
     .then((response) => {
       setOriginalJobList(response.data);
       setJobList(response.data);
-      setTimeout(()=> setLoading(false) , 1000);
+      setTimeout(()=> setLoading(false) , 500);
     })
     .catch((error) => {
-      console.log(error);
       sendAck('Error fetching jobs', ACK_TYPE.ERROR);
     });
   }
@@ -54,8 +53,8 @@ function HomePage() {
   }
   
   const addJob = async (event , handleClose) =>{
+
     const getJob = (jobData) => {
-  
       const newJob = {
         companyName: jobData.companyName,
         jobTitle: jobData.jobRole,
@@ -91,8 +90,8 @@ function HomePage() {
     axios.delete(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/delete/${jobId}`)
     .then(async(response) => {
         $('#search-bar').val('');
-        sendAck('Job deleted successfully', ACK_TYPE.SUCCESS);
         await onLoad();
+        sendAck('Job deleted successfully', ACK_TYPE.SUCCESS);
       })
       .catch((error) => {
         sendAck(error.response.data, ACK_TYPE.ERROR);
@@ -146,10 +145,10 @@ function HomePage() {
             Sort by
           </button>
           <ul className ="dropdown-menu dropdown-menu-dark">
-            <li><a id='0' className ="dropdown-item active" onClick={() => sortJobs(0)} >Date latest</a></li>
+            <li><a id='0' className ="dropdown-item" onClick={() => sortJobs(0)} >Date latest</a></li>
             <li><a id='1' className ="dropdown-item" onClick={() => sortJobs(1)} >Date oldest</a></li>
-            <li><a id='2' className ="dropdown-item" onClick={() => sortJobs(2)} >Role ascending</a></li>
-            <li><a id='3' className ="dropdown-item" onClick={() => sortJobs(3)} >Role descending</a></li>
+            <li><a id='2' className ="dropdown-item" onClick={() => sortJobs(2)} >Title ascending</a></li>
+            <li><a id='3' className ="dropdown-item" onClick={() => sortJobs(3)} >Title descending</a></li>
           </ul>
         </div>
         <form className="d-flex" role="search">

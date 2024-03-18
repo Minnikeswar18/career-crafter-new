@@ -37,7 +37,7 @@ function HiringPage(){
       const allProfiles = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/getFreelancers`);
       setProfiles(allProfiles.data);
       setFilteredProfiles(allProfiles.data);
-      setTimeout(()=> setLoading(false) , 1000);
+      setTimeout(()=> setLoading(false) , 500);
     }
     catch(error){
       sendAck(ACK_TYPE.ERROR, 'Error fetching profiles');

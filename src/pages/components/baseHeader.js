@@ -11,6 +11,10 @@ function BaseHeader() {
         }
     }
 
+    const toProfile = () => {
+        window.location.href = '/profile'
+    }
+
     return (
         <nav className="navbar bg-dark navbar-expand-lg">
             <div className="container-fluid">
@@ -52,6 +56,9 @@ function BaseHeader() {
                     </li>
                 </ul>
                 </div>
+                <button className="btn btn-outline-primary me-3" onClick={toProfile}>
+                    <i className="far  fa-user profile-button" /> My Account
+                </button>
                 <button className="btn btn-outline-danger me-3" onClick={handleSignOut}>Sign out</button>
             </div>
         </nav>
