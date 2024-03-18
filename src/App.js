@@ -11,6 +11,7 @@ import ProfilePage from './pages/profilePage.js';
 import '../node_modules/bootstrap/dist/css/bootstrap.css'
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
+import NotFoundPage from './pages/notFoundPage.js';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/hire" element={<HiringPage />} />
           <Route path="/myhirings" element={<MyHiringPage/>} />
           <Route path ="/profile" element={<ProfilePage />} />
+          <Route path="*" element={<NotFoundPage/>} />
         </Routes>
       </Router>
     </>

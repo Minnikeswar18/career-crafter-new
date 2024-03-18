@@ -44,7 +44,8 @@ function EntryPage() {
         axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/login`, data)
         .then((response) => {
             localStorage.setItem('jwt', response.data.token);
-            window.location.href = '/home';
+            event.target.reset();
+            navigate('/home');
         }).catch((error) => {
             console.log(error);
             sendAck(error.response.data, ACK_TYPE.ERROR);
@@ -53,13 +54,16 @@ function EntryPage() {
 
     const handleSignup = async (event) => {
         event.preventDefault();
+
         const formData =  new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
+        
         data.isRecruiter = data.isRecruiter !== undefined ;
         try{
             await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/register`, data);
             sendAck('Account created and verification email sent successfully', ACK_TYPE.SUCCESS);
             setIsLogin(true);
+            event.target.reset();
         }
         catch(error){
             sendAck(error.response.data, ACK_TYPE.ERROR);
