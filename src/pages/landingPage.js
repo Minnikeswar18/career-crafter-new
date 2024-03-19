@@ -13,7 +13,7 @@ function LandingPage() {
         <div className="landing-content">
             <div className="landing-text"> 
                 <h2> Welcome to Career Crafter</h2>
-                <p> Create your personalized account in minutes, detailing your skills and aspirations. Explore tailored job listings matched to your profile. </p><p> Join us now to embark on your journey to professional success. </p>
+                <p> Create your personalized account in minutes, detailing your skills and aspirations. Explore tailored freelancing job listings matched to your profile. </p><p> Join us now to embark on your journey to professional success. </p>
                 <div className="landing-buttons">
                   <button class='glowing-btn rec' onClick={() => navigate('/entry')}><span class='glowing-txt'>ENTER</span></button>
                 </div>

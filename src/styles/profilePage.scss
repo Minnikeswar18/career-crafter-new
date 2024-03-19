@@ -2,8 +2,23 @@
 
 @import 'https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:300,400';
 
-.hiring-heading{
-  margin: 30px auto !important;
+.profile-svg{
+    width:25px;
+}
+
+.profile-content{
+    margin-top: 20px !important;
+    display: flex;
+    justify-content: left !important;
+    align-items: center;    
+}
+
+.title-span{
+    background: rgb(234, 232, 232) !important;
+}
+
+.profile-input{
+    width: 35vw !important;
 }
 
 /* colors */
@@ -16,8 +31,8 @@ $accent-inactive: desaturate($accent, 85%);
 $secondary: $accent-inactive;
 
 /* tab setting */
-$tab-count: 3;
-$indicator-width: 100px;
+$tab-count: 4;
+$indicator-width: 50px;
 $indicator-height: 4px;
 
 /* breakpoints */
@@ -27,9 +42,9 @@ $breakpoints: (
 );
 
 /* selectors relative to radio inputs */
-$label-selector: "~ .hiring-ul > li";
-$slider-selector: "~ .slider";
-$content-selector: "~ .content > section";
+$label-selector: "~ .profile-ul > li";
+$slider-selector: "~ .profile-slider";
+$content-selector: "~ .content > .profile-section";
 
 @mixin tabs(
   $label-selector: $label-selector,
@@ -60,12 +75,8 @@ $content-selector: "~ .content > section";
   user-select: $value;
 }
 
-html {
-  width: 100%;
-  height: 100%;
-}
 
-.content  {
+.profile-content  {
   width: 100%;
   height: 100%;
   display: flex;
@@ -76,21 +87,8 @@ html {
   padding-top: 20px;
 }
 
-body {
-  background: #efefef;
-  color: $dark;
-  height: 100%;
-  
-  h1 {
-    text-align: center;
-    color: white;
-    font-weight: 300;
-    padding: 40px 0 20px 0;
-    margin: 0;
-  }
-}
 
-.tabs {
+.profile-tabs {
   left: 50%;
   transform: translateX(-50%);
   position: relative;
@@ -106,14 +104,14 @@ body {
     display: none;
   }
   
-  .content section h2,
-  .hiring-ul li label {
+  .profile-content .profile-section h2,
+  .profile-ul li label {
     font-weight: bold;
     font-size: 18px;
     color: $accent;
   }
   
-  .hiring-ul {
+  .profile-ul {
     list-style-type: none;
     padding-left: 0;
     display: flex;
@@ -147,7 +145,7 @@ body {
           display: none;
         }
         
-        svg {
+        .profile-svg {
           fill: $secondary;
           height: 1.2em;
           vertical-align: bottom;
@@ -160,7 +158,7 @@ body {
         &:active {
           outline: 0;
           color: lighten($secondary, 15%);
-          svg {
+          .profile-svg {
             fill: lighten($secondary, 15%);
           }
         }
@@ -168,7 +166,7 @@ body {
     }
   }
   
-  .slider {
+  .profile-slider {
     position: relative;
     width: #{100%/$tab-count};
     transition: all 0.33s cubic-bezier(0.38, 0.8, 0.32, 1.07);
@@ -184,10 +182,10 @@ body {
 
   }
   
-  .content {
+  .profile-content {
     margin-top: 30px;
     
-    section {
+    .profile-section {
       display: none;
       animation: {
         name: content;
@@ -215,7 +213,7 @@ body {
     }
   }
   
-  input[name="tab-control"] {
+  .profile-input[name="tab-control"] {
     @include tabs {
       > label {
         cursor: default;
@@ -244,7 +242,7 @@ body {
   }
   
   @media (max-width: map-get($breakpoints, medium)) {
-    ul li label {
+    .profile-ul li label {
       white-space: initial;
       
       br {
@@ -258,7 +256,7 @@ body {
   }
   
   @media (max-width: map-get($breakpoints, small)) {
-    ul li label {
+    .profile-ul li label {
       padding: 5px;
       border-radius: 5px;
       
@@ -267,11 +265,7 @@ body {
       }
     }
     
-    .slider {
-      display: none;
-    }
-    
-    .content {
+    .profile-content {
       margin-top: 20px; 
       section h2 {
         display: block;

@@ -1,11 +1,12 @@
-import '../styles/entryPage.css'
 import { useState,useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import '../styles/entryPage.css'
 import loginImg from '../assets/img/entry_page.png'
 import signupImg from '../assets/img/signup_page.png'
-import axios from 'axios';
 import checkJwt from '../helpers/jwt';
 import {AckModal , ACK_TYPE} from './components/ackModal';
-import { useNavigate } from 'react-router-dom';
 import LogoHeader from './components/logoHeader';
 
 function EntryPage() {
@@ -57,7 +58,7 @@ function EntryPage() {
 
         const formData =  new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
-        
+
         data.isRecruiter = data.isRecruiter !== undefined ;
         try{
             await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/register`, data);

@@ -40,6 +40,7 @@ function HiringPage(){
       setTimeout(()=> setLoading(false) , 500);
     }
     catch(error){
+      setLoading(false);
       sendAck(ACK_TYPE.ERROR, 'Error fetching profiles');
     }
   }
@@ -94,7 +95,7 @@ function HiringPage(){
     data.inviteeEmail = invitee.email;
     data.inviteeUsername = invitee.username;
     try{
-      await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/invite`, {invitee, invitation : data});
+      await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/invite`, {inviteeId : invitee._id, invitation : data});
       handleCloseForm();
       sendAck(ACK_TYPE.SUCCESS, 'Invitation sent successfully');
     }

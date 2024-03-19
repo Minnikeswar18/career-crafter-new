@@ -19,8 +19,8 @@
 
 .landing-text{
     color: white;
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 1.5rem;
+    /* font-weight: 600; */
     text-align: center;
     width: 50%;
     display: flex;

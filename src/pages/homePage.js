@@ -42,6 +42,7 @@ function HomePage() {
       setTimeout(()=> setLoading(false) , 500);
     })
     .catch((error) => {
+      setLoading(false);
       sendAck('Error fetching jobs', ACK_TYPE.ERROR);
     });
   }
