@@ -1,8 +1,16 @@
 import { Modal } from "react-bootstrap";
 import '../../styles/components/viewJob.css';
 import Tag from "./tag";
+import { useNavigate } from "react-router-dom";
 
 function ViewJob({ job , show , handleClose}) {
+
+    const navigate = useNavigate();
+    
+    const handleApplicants = async(event) => {
+        event.preventDefault();
+        navigate(`/applications/${job._id}`);
+    }
 
     return (
         <Modal show={show} onHide={handleClose} size='lg' backdrop="static">
@@ -65,7 +73,7 @@ function ViewJob({ job , show , handleClose}) {
                     </div>
                 }
                     <div className="d-flex flex-row justify-content-end">
-                        <button className="btn btn-primary me-3">
+                        <button className="btn btn-primary me-3" onClick={handleApplicants}>
                             View applicants
                         </button>
                     </div>

@@ -2,6 +2,12 @@ import '../../styles/components/inviteList.css';
 import ViewInvite from './viewInvite';
 import {useState} from 'react';
 
+const INVITATION_STATUS = {
+    ACCEPTED: 1,
+    PENDING: 0,
+    REJECTED: -1,
+  }
+
 function InviteList({invitation , deleteInvitation}) {
     const[showInvite, setShowInvite] = useState(false);
     const handleShowInvite = () => setShowInvite(true);
@@ -33,7 +39,7 @@ function InviteList({invitation , deleteInvitation}) {
         </div>
         <div className='buttons'>
             <button type="button" className="btn btn-primary" onClick={handleShowInvite}>View</button>
-            {invitation.status === 'pending' && <button type="button" className="btn btn-danger" onClick={() => deleteInvitation(invitation._id)}>Delete</button>}
+            {invitation.status === INVITATION_STATUS.PENDING && <button type="button" className="btn btn-danger" onClick={() => deleteInvitation(invitation._id)}>Delete</button>}
         </div>
     </div>
   );
