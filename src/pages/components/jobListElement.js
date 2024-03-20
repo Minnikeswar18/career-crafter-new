@@ -2,7 +2,7 @@ import '../../styles/components/JobListElement.css'
 import ViewJob from './viewJob';
 import { useState } from 'react';
 
-function JobListElement({job , deleteFunction , index , handleShowAck}){
+function JobListElement({job , deleteFunction , index}){
     const [showView, setShowView] = useState(false);
     const handleShowView = () => setShowView(true);
     const handleCloseView = () => setShowView(false);
@@ -17,8 +17,7 @@ function JobListElement({job , deleteFunction , index , handleShowAck}){
     }
 
     async function deleteElement(){
-        await deleteFunction(job.jobId);
-        handleShowAck();
+        await deleteFunction(job._id);
     }
     return(
         <div className='element'>

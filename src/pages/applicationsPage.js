@@ -67,9 +67,8 @@ function ApplicationsPage() {
       });
   }
 
-  const acceptApplication = async (event , applicationId) => {
-    event.preventDefault();
-    axios.delete(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/acceptApplication` , {applicationId})
+  const acceptApplication = async (applicationId) => {
+    axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/approveApplication` , {applicationId})
       .then(async (response) => {
         await onLoad();
         sendAck(ACK_TYPE.SUCCESS, "Application approved successfully");
@@ -87,7 +86,7 @@ function ApplicationsPage() {
     <>
       <BaseHeader />
       <AckModal showAck={showAck} message={ackMessage} ackType={ackType} handleCloseAck={handleCloseAck} />
-      <h1 className='hiring-heading'>Your Hirings</h1>
+      <h1 className='hiring-heading'>Applications for this job</h1>
       <div className="tabs">
         <input type="radio" id="tab1" name="tab-control" defaultChecked="tab1" />
         <input type="radio" id="tab2" name="tab-control" />

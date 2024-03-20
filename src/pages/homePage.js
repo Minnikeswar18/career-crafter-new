@@ -78,9 +78,9 @@ function HomePage() {
     
     axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/add`, newJob)
     .then(async(response) => {
-      sendAck('Job added successfully' , ACK_TYPE.SUCCESS);
-      handleClose();
       await onLoad();
+      handleClose();
+      sendAck('Job added successfully' , ACK_TYPE.SUCCESS);
     })
     .catch((error) => {
       sendAck(error.response.data, ACK_TYPE.ERROR);
@@ -95,7 +95,7 @@ function HomePage() {
         sendAck('Job deleted successfully', ACK_TYPE.SUCCESS);
       })
       .catch((error) => {
-        sendAck(error.response.data, ACK_TYPE.ERROR);
+        sendAck('Error deleting the job', ACK_TYPE.ERROR);
       });
   }
 
@@ -164,7 +164,7 @@ function HomePage() {
         </form>
       </div>
       <div className='home-page-content'>
-        {jobList.map((job, index) =>  <JobElement key={index} index={index} job={job} deleteFunction={deleteJob} handleShowAck={handleShowAck}/>
+        {jobList.map((job, index) =>  <JobElement key={index} index={index} job={job} deleteFunction={deleteJob}/>
         )}
       </div>
     </div>
