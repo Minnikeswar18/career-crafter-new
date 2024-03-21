@@ -109,7 +109,7 @@ function EntryPage() {
                                 />
                                 </div>
                                 <div className="text">
-                                <a href="#">Forgot password?</a>
+                                <a className="forgot-password-link" href="/forgotPassword">Forgot password?</a>
                                 </div>
                                 <div className="button input-box">
                                 <input type="submit" defaultValue="Submit" />
@@ -160,7 +160,8 @@ function EntryPage() {
                                 <input type="submit" defaultValue="Sumbit" />
                                 </div>
                                 <div className="text sign-up-text">
-                                Already have an account? <label htmlFor="flip" onClick={toggle}>Login now</label>
+                                    Already have an account? 
+                                    <label htmlFor="flip" onClick={toggle}>Login now</label>
                                 </div>
                             </div>
                             </form>

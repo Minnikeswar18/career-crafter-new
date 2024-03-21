@@ -1,6 +1,6 @@
 .element{
     background-color: aliceblue;
-    padding: 40px;
+    padding: 20px 40px;
     display: flex;
     flex-direction: row;
     min-height: 150px;

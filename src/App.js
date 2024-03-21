@@ -13,6 +13,8 @@ import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css';
 import NotFoundPage from './pages/notFoundPage.js';
 import ApplicationsPage from './pages/applicationsPage.js';
+import ForgotPassword from './pages/forgotPassword.js';
+import ResetPassword from './pages/resetPassword.js';
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
           <Route path="/myhirings" element={<MyHiringPage/>} />
           <Route path ="/profile" element={<ProfilePage />} />
           <Route path="/applications/:jobId" element={<ApplicationsPage/>} />
+          <Route path="/forgotPassword" element={<ForgotPassword/>} />
+          <Route path="/resetPassword/:otp" element={<ResetPassword/>} />
           <Route path="*" element={<NotFoundPage/>} />
         </Routes>
       </Router>

@@ -97,6 +97,11 @@
   width: 25px;
   background: #7d2ae8;
 }
+
+.forgot-password-link{
+  color:  #7d2ae8;
+}
+
 .forms .signup-form  .title:before{
   width: 20px;
 }
