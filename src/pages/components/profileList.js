@@ -25,8 +25,8 @@ function ProfileList({profile , handleShowInviteForm}) {
             </div>
         </div>
         <div className='buttons-div'>
-            <button className='btn btn-primary mt-4'><a className='profile-link' href='https://www.google.com' target='_blank'>View Profile</a></button>
-            <button className='btn btn-success mb-4' onClick={() => handleShowInviteForm(profile)}>Invite to Job</button>
+            <button className='btn btn-primary mb-3'><a className='profile-link' href='#'>View Profile</a></button>
+            <button className='btn btn-success' onClick={() => handleShowInviteForm(profile)}>Invite to Job</button>
         </div>
     </div>
   );

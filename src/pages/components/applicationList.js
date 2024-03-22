@@ -8,7 +8,7 @@ const APPLICATION_STATUS = {
     REJECTED: -1,
 }
 
-function ApplicationList({application , rejectApplication, acceptApplication}) {
+function ApplicationList({application , rejectApplication, acceptApplication ,sendChatInvite}) {
     const[showApplication, setShowApplication] = useState(false);
     const handleShowApplication = () => setShowApplication(true);
     const handleCloseApplication = (event) =>{
@@ -45,6 +45,10 @@ function ApplicationList({application , rejectApplication, acceptApplication}) {
                 application.status === APPLICATION_STATUS.PENDING 
                 && 
                 <button type="button" onClick={() => rejectApplication(application._id)} className="btn btn-danger">Reject</button>}
+                {
+                application.status === APPLICATION_STATUS.ACCEPTED 
+                && 
+                <button type="button" onClick={() => sendChatInvite(application.appliedBy)} className="btn btn-warning">Invite to chat</button>}
             </div>
         </div>
     </div>

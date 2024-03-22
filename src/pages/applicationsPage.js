@@ -3,6 +3,7 @@ import checkJwt from '../helpers/jwt';
 import { ACK_TYPE, AckModal } from './components/ackModal';
 import ApplicationList from './components/applicationList';
 import Loader from './components/loader';
+import LoadingOverlay from 'react-loading-overlay-ts';
 
 import { useState, useEffect } from 'react';
 import { useNavigate , useParams} from 'react-router-dom';
@@ -28,6 +29,8 @@ function ApplicationsPage() {
   
   const [loading, setLoading] = useState(true);
   const [applications, setApplications] = useState([]);
+
+  const [sending , setSending] = useState(false);
   
   const sendAck = (type, message) => {
     setAckType(type);
@@ -75,6 +78,23 @@ function ApplicationsPage() {
       })
       .catch((error) => {
         sendAck(ACK_TYPE.ERROR, "Error approving application");
+      });
+  }
+
+  const sendChatInvite = (invitation) => {
+    setLoading(true);
+    const dest = {
+      inviteeUsername: invitation.username,
+      inviteeEmail: invitation.email,
+    }
+    axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/inviteToChat`, dest)
+      .then(async (response) => {
+        setLoading(false);
+        sendAck(ACK_TYPE.SUCCESS, "Chat invite sent successfully");
+      })
+      .catch((error) => {
+        setLoading(false);
+        sendAck(ACK_TYPE.ERROR, error.response.data);
       });
   }
 
@@ -128,7 +148,7 @@ function ApplicationsPage() {
             {
             applications.filter(application => application.status === APPLICATION_STATUS.ACCEPTED).length > 0 
             ? 
-            applications.filter(application => application.status === APPLICATION_STATUS.ACCEPTED).map((application, index) => <ApplicationList application={application} key={index}  rejectApplication={rejectApplication} acceptApplication={acceptApplication}/>) 
+            applications.filter(application => application.status === APPLICATION_STATUS.ACCEPTED).map((application, index) => <ApplicationList application={application} key={index}  rejectApplication={rejectApplication} acceptApplication={acceptApplication} sendChatInvite={sendChatInvite}/>) 
             : 
             <h3 className='mt-4'>No data found</h3>}
           </section>
@@ -136,7 +156,7 @@ function ApplicationsPage() {
           <section>
             {applications.filter(application => application.status === APPLICATION_STATUS.PENDING).length > 0 
             ?
-             applications.filter(application => application.status === APPLICATION_STATUS.PENDING).map((application, index) => <ApplicationList application={application} key={index}  rejectApplication={rejectApplication} acceptApplication={acceptApplication}/>) 
+             applications.filter(application => application.status === APPLICATION_STATUS.PENDING).map((application, index) => <ApplicationList application={application} key={index}  rejectApplication={rejectApplication} acceptApplication={acceptApplication} sendChatInvite={sendChatInvite}/>) 
              :
               <h3 className='mt-4'>No data found</h3>}
           </section>
@@ -144,7 +164,7 @@ function ApplicationsPage() {
           <section>
             {applications.filter(application => application.status === APPLICATION_STATUS.REJECTED).length > 0 
             ?
-             applications.filter(application => application.status === APPLICATION_STATUS.REJECTED).map((application, index) => <ApplicationList application={application} rejectApplication={rejectApplication} acceptApplication={acceptApplication} key={index} />) 
+             applications.filter(application => application.status === APPLICATION_STATUS.REJECTED).map((application, index) => <ApplicationList application={application} rejectApplication={rejectApplication} acceptApplication={acceptApplication} key={index} sendChatInvite={sendChatInvite} />) 
              :
               <h3 className='mt-4'>No data found</h3>}
           </section>

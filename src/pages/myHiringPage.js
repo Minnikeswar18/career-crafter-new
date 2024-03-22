@@ -54,7 +54,24 @@ function MyHiringPage() {
       }
       await onLoad();
     });
-  },[]);
+  }, []);
+
+  const sendChatInvite = (invitation) => {
+    setLoading(true);
+    const dest = {
+      inviteeUsername: invitation.inviteeUsername,
+      inviteeEmail: invitation.inviteeEmail,
+    }
+    axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/inviteToChat`, dest)
+      .then(async (response) => {
+        setLoading(false);
+        sendAck(ACK_TYPE.SUCCESS, "Chat invite sent successfully");
+      })
+      .catch((error) => {
+        setLoading(false);
+        sendAck(ACK_TYPE.ERROR, error.response.data);
+      });
+  }
 
   const deleteInvitation = async (invitationId) => {
     axios.delete(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/deleteInvitation/${invitationId}`)
@@ -112,36 +129,34 @@ function MyHiringPage() {
         <div className="slider">
           <div className="indicator" />
         </div>
-        <div className="content">        
+        <div className="content">
           <section>
             {
-            invitations.filter(invitation => invitation.status === INVITATION_STATUS.ACCEPTED).length > 0 
-            ? 
-            invitations.filter(invitation => invitation.status === INVITATION_STATUS.ACCEPTED).map((invitation, index) => <InviteList invitation={invitation} key={index} />) 
-            : 
-            <h3 className='mt-4'>No data found</h3>}
+              invitations.filter(invitation => invitation.status === INVITATION_STATUS.ACCEPTED).length > 0
+                ?
+                invitations.filter(invitation => invitation.status === INVITATION_STATUS.ACCEPTED).map((invitation, index) => <InviteList invitation={invitation} key={index} sendChatInvite={sendChatInvite}/>)
+                :
+                <h3 className='mt-4'>No data found</h3>}
           </section>
 
           <section>
-            {invitations.filter(invitation => invitation.status === INVITATION_STATUS.PENDING).length > 0 
-            ?
-             invitations.filter(invitation => invitation.status === INVITATION_STATUS.PENDING).map((invitation, index) => <InviteList invitation={invitation} key={index} deleteInvitation={deleteInvitation} />) 
-             :
+            {invitations.filter(invitation => invitation.status === INVITATION_STATUS.PENDING).length > 0
+              ?
+              invitations.filter(invitation => invitation.status === INVITATION_STATUS.PENDING).map((invitation, index) => <InviteList invitation={invitation} key={index} deleteInvitation={deleteInvitation} />)
+              :
               <h3 className='mt-4'>No data found</h3>}
           </section>
 
           <section>
-            {invitations.filter(invitation => invitation.status === INVITATION_STATUS.REJECTED).length > 0 
-            ?
-             invitations.filter(invitation => invitation.status === INVITATION_STATUS.REJECTED).map((invitation, index) => <InviteList invitation={invitation} key={index} />) 
-             :
+            {invitations.filter(invitation => invitation.status === INVITATION_STATUS.REJECTED).length > 0
+              ?
+              invitations.filter(invitation => invitation.status === INVITATION_STATUS.REJECTED).map((invitation, index) => <InviteList invitation={invitation} key={index} />)
+              :
               <h3 className='mt-4'>No data found</h3>}
           </section>
         </div>
       </div>
     </>
-
-
   );
 }
 

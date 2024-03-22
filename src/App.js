@@ -7,14 +7,15 @@ import HomePage from "./pages/homePage";
 import HiringPage from "./pages/hiringPage.js";
 import MyHiringPage from "./pages/myHiringPage.js";
 import ProfilePage from './pages/profilePage.js';
-
-import '../node_modules/bootstrap/dist/css/bootstrap.css'
-import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
-import './App.css';
 import NotFoundPage from './pages/notFoundPage.js';
 import ApplicationsPage from './pages/applicationsPage.js';
 import ForgotPassword from './pages/forgotPassword.js';
 import ResetPassword from './pages/resetPassword.js';
+import ChatPage from './pages/chatPage.js';
+
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
+import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
+import './App.css';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/applications/:jobId" element={<ApplicationsPage/>} />
           <Route path="/forgotPassword" element={<ForgotPassword/>} />
           <Route path="/resetPassword/:otp" element={<ResetPassword/>} />
+          <Route path="/chat/:username/:roomId" element={<ChatPage/>} />
           <Route path="*" element={<NotFoundPage/>} />
         </Routes>
       </Router>

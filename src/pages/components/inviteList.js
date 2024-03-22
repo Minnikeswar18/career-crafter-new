@@ -6,9 +6,9 @@ const INVITATION_STATUS = {
     ACCEPTED: 1,
     PENDING: 0,
     REJECTED: -1,
-  }
+}
 
-function InviteList({invitation , deleteInvitation}) {
+function InviteList({invitation , deleteInvitation , sendChatInvite}) {
     const[showInvite, setShowInvite] = useState(false);
     const handleShowInvite = () => setShowInvite(true);
     const handleCloseInvite = (event) =>{
@@ -40,6 +40,7 @@ function InviteList({invitation , deleteInvitation}) {
         <div className='buttons'>
             <button type="button" className="btn btn-primary" onClick={handleShowInvite}>View</button>
             {invitation.status === INVITATION_STATUS.PENDING && <button type="button" className="btn btn-danger" onClick={() => deleteInvitation(invitation._id)}>Delete</button>}
+            {invitation.status === INVITATION_STATUS.ACCEPTED && <button type="button" className="btn btn-warning" onClick={() => sendChatInvite(invitation)}>Invite to chat</button>}
         </div>
     </div>
   );
