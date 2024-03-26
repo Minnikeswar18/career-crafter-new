@@ -1,0 +1,17 @@
+.center-msg{
+    display: flex;
+    justify-content: center;
+}
+
+.center-bubble{
+    background-color: rgba(22, 250, 174, 0.654);
+    display: flex;
+    align-items: center;
+    padding: 5px 10px !important;
+}
+
+.center-msg-info , .center-msg-info-name    {
+    margin: 0;
+    font-weight: 400;
+    font-size: small;
+}

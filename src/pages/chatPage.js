@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import NotFoundPage from "./notFoundPage";
 import RightMessage from "./components/rightMessage";
 import LeftMessage from "./components/leftMessage";
+import JoinedBanner from "./components/joinedBanner";
 
 function ChatPage() {
     const [message, setMessage] = useState('');
@@ -24,6 +25,7 @@ function ChatPage() {
         setSocket(newSocket); 
 
         return () => {
+            newSocket.emit("leftRoom" , {roomId , username});
             newSocket.disconnect();
         };
     },[roomId]);
@@ -31,6 +33,7 @@ function ChatPage() {
     useEffect(() => {
         if (socket && roomId) {
             socket.emit('joinRoom', {roomId , username});
+            setMessages( prevMessages => [...prevMessages , <JoinedBanner key={prevMessages.length} message={"You have joined the chat"} />]);
         }
     }, [socket, roomId]);
 
@@ -40,10 +43,19 @@ function ChatPage() {
                 const { username, message, time } = messageContent;
                 setMessages( prevMessages => [...prevMessages , <LeftMessage key={prevMessages.length} username={username} message={message} time={time} />]);
             });
+
+            socket.on("joined" , (username) => {
+                setMessages( prevMessages => [...prevMessages , <JoinedBanner key={prevMessages.length} message={`${username} has joined the chat`} />]);
+            })
+
+            socket.on("left" , (username) => {
+                console.log("left");
+                setMessages( prevMessages => [...prevMessages , <JoinedBanner key={prevMessages.length} message={`${username} has left the chat`} />]);
+            });
         }
     } , [socket]);
     
-    const sendMessage = (event) => {
+    const sendMessage = async(event) => {
         event.preventDefault();
         if (!message.trim()) return;
         const date = new Date();    
