@@ -1,8 +1,7 @@
-import BaseHeader from "./components/baseHeader";
-import '../styles/chatPage.css';
 import { useParams } from "react-router-dom";
 import io from 'socket.io-client';
 import { useEffect, useState } from "react";
+import '../styles/chatPage.css';
 import NotFoundPage from "./notFoundPage";
 import RightMessage from "./components/rightMessage";
 import LeftMessage from "./components/leftMessage";
@@ -25,7 +24,6 @@ function ChatPage() {
         setSocket(newSocket); 
 
         return () => {
-            newSocket.emit("leftRoom" , {roomId , username});
             newSocket.disconnect();
         };
     },[roomId]);
@@ -47,11 +45,6 @@ function ChatPage() {
             socket.on("joined" , (username) => {
                 setMessages( prevMessages => [...prevMessages , <JoinedBanner key={prevMessages.length} message={`${username} has joined the chat`} />]);
             })
-
-            socket.on("left" , (username) => {
-                console.log("left");
-                setMessages( prevMessages => [...prevMessages , <JoinedBanner key={prevMessages.length} message={`${username} has left the chat`} />]);
-            });
         }
     } , [socket]);
     
