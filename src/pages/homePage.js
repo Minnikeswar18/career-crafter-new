@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import checkJwt from '../helpers/jwt';
 import Loader from './components/loader';
+import PopupLoader from './components/popupLoader';
 
 function HomePage() {
   const [originalJobList, setOriginalJobList] = useState([]);
@@ -19,6 +20,7 @@ function HomePage() {
   const [ackType, setAckType] = useState('');
 
   const [loading , setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
   
   const handleCloseAck = () => setShowAck(false);
   const handleShowAck = () => setShowAck(true);
@@ -39,7 +41,7 @@ function HomePage() {
     .then((response) => {
       setOriginalJobList(response.data);
       setJobList(response.data);
-      setTimeout(()=> setLoading(false) , 500);
+      setLoading(false);
     })
     .catch((error) => {
       setLoading(false);
@@ -54,7 +56,8 @@ function HomePage() {
   }
   
   const addJob = async (event , handleClose) =>{
-
+    if(event) event.preventDefault();
+    setShowLoader(true);
     const getJob = (jobData) => {
       const newJob = {
         companyName: jobData.companyName,
@@ -80,21 +83,26 @@ function HomePage() {
     .then(async(response) => {
       await onLoad();
       handleClose();
+      setShowLoader(false);
       sendAck('Job added successfully' , ACK_TYPE.SUCCESS);
     })
     .catch((error) => {
+      setShowLoader(false);
       sendAck(error.response.data, ACK_TYPE.ERROR);
     });
   }
   
   const deleteJob = async(jobId) => {
+    setShowLoader(true);
     axios.delete(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/delete/${jobId}`)
     .then(async(response) => {
         $('#search-bar').val('');
         await onLoad();
+        setShowLoader(false);
         sendAck('Job deleted successfully', ACK_TYPE.SUCCESS);
       })
       .catch((error) => {
+        setShowLoader(false);
         sendAck('Error deleting the job', ACK_TYPE.ERROR);
       });
   }
@@ -139,6 +147,7 @@ function HomePage() {
       <Header />
       <AddJobForm addjobform={addJob}/>
       <AckModal message = {ackMessage} ackType = {ackType} showAck = {showAck} handleCloseAck = {handleCloseAck}/>
+      <PopupLoader showLoader={showLoader}/>
       <h1>Jobs Posted by You</h1>
       <div className='home-page-header'>
         <div className ="dropdown">

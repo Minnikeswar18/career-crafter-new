@@ -3,6 +3,7 @@ import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import { useState } from 'react';
 import { AckModal , ACK_TYPE } from "./components/ackModal";
+import PopupLoader from "./components/popupLoader";
 
 function ResetPassword() {
     const otp = useParams().otp;
@@ -10,6 +11,8 @@ function ResetPassword() {
     const [showAck, setShowAck] = useState(false);
     const [ackMessage, setAckMessage] = useState('');
     const [ackType, setAckType] = useState('');
+    const [showLoader, setShowLoader] = useState(false);
+
     const handleCloseAck = () => setShowAck(false);
     const handleShowAck = () => setShowAck(true);
 
@@ -21,14 +24,17 @@ function ResetPassword() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setShowLoader(true);
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
         data.otp = otp;
         axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/changepassword`, data)
         .then((response) => {
+            setShowLoader(false);
             sendAck("Password reset successfully" , ACK_TYPE.SUCCESS);
         })
         .catch((error) => {
+            setShowLoader(false);
             sendAck(error.response.data , ACK_TYPE.ERROR);
         });
     }
@@ -36,6 +42,7 @@ function ResetPassword() {
         <div className="d-flex flex-column" style={{ height: "100vh" }}>
             <LogoHeader />
             <AckModal message={ackMessage} handleCloseAck={handleCloseAck} showAck={showAck} ackType={ackType}/>
+            <PopupLoader showLoader={showLoader} />
             <div className="row">
                 <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
                     <div className="card border-0 shadow rounded-3 my-5">

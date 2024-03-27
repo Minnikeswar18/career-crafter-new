@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import $ from 'jquery';
 
+import PopupLoader from './components/popupLoader';
 import BaseHeader from './components/baseHeader';
 import ProfileList from './components/profileList';
 import InviteForm from './components/inviteForm';
@@ -23,6 +24,7 @@ function HiringPage(){
   const [invitee, setInvitee] = useState({});
   const [inviter, setInviter] = useState({});
   const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
 
   const handleCloseForm = () => setShowForm(false);
   const handleShowForm = () => setShowForm(true);
@@ -37,7 +39,7 @@ function HiringPage(){
       const allProfiles = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/getFreelancers`);
       setProfiles(allProfiles.data);
       setFilteredProfiles(allProfiles.data);
-      setTimeout(()=> setLoading(false) , 500);
+      setLoading(false);
     }
     catch(error){
       setLoading(false);
@@ -89,17 +91,19 @@ function HiringPage(){
 
   const handleInvite = async(event , invitee) =>{
     event.preventDefault();
-
+    setShowLoader(true);
     const formData =  new FormData(event.target)
     const data = Object.fromEntries(formData.entries())
     data.inviteeEmail = invitee.email;
     data.inviteeUsername = invitee.username;
     try{
       await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/invite`, {inviteeId : invitee._id, invitation : data});
+      setShowLoader(false);
       handleCloseForm();
       sendAck(ACK_TYPE.SUCCESS, 'Invitation sent successfully');
     }
     catch(error){
+      setShowLoader(false);
       sendAck(ACK_TYPE.ERROR, error.response.data);
     }
   }
@@ -117,6 +121,7 @@ function HiringPage(){
   return(
     <div className='hiring-main'>
         <AckModal showAck={showAck} handleCloseAck={handleCloseAck} ackType={ackType} message = {ackMessage} />
+        <PopupLoader showLoader={showLoader} />
         <BaseHeader />
         <InviteForm invitee={invitee} inviter={inviter} showForm = {showForm} handleCloseForm={handleCloseForm} handleSubmit={handleInvite}/>
         <h1 className='title mt-4 mb-5'>Discover Freelancers</h1>

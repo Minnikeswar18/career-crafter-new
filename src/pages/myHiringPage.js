@@ -4,6 +4,7 @@ import checkJwt from '../helpers/jwt';
 import { ACK_TYPE, AckModal } from './components/ackModal';
 import InviteList from './components/inviteList';
 import Loader from './components/loader';
+import PopupLoader from './components/popupLoader';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +29,7 @@ function MyHiringPage() {
 
   const [loading, setLoading] = useState(true);
   const [invitations, setInvitations] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
 
   const sendAck = (type, message) => {
     setAckType(type);
@@ -38,8 +40,9 @@ function MyHiringPage() {
   const onLoad = async () => {
     try {
       const allInvitations = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/getInvitations`);
+      console.log(allInvitations.data)
       setInvitations(allInvitations.data);
-      setTimeout(() => setLoading(false), 500);
+      setLoading(false);
     }
     catch (error) {
       setLoading(false);
@@ -57,18 +60,18 @@ function MyHiringPage() {
   }, []);
 
   const sendChatInvite = (invitation) => {
-    setLoading(true);
+    setShowLoader(true);
     const dest = {
       inviteeUsername: invitation.inviteeUsername,
       inviteeEmail: invitation.inviteeEmail,
     }
     axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/inviteToChat`, dest)
       .then(async (response) => {
-        setLoading(false);
+        setShowLoader(false);
         sendAck(ACK_TYPE.SUCCESS, "Chat invite sent successfully");
       })
       .catch((error) => {
-        setLoading(false);
+        setShowLoader(false);
         sendAck(ACK_TYPE.ERROR, error.response.data);
       });
   }
@@ -91,6 +94,7 @@ function MyHiringPage() {
   return (
     <>
       <BaseHeader />
+      <PopupLoader showLoader={showLoader} />
       <AckModal showAck={showAck} message={ackMessage} ackType={ackType} handleCloseAck={handleCloseAck} />
       <h1 className='hiring-heading'>Your Hirings</h1>
       <div className="tabs">

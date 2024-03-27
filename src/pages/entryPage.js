@@ -8,6 +8,7 @@ import signupImg from '../assets/img/signup_page.png'
 import checkJwt from '../helpers/jwt';
 import {AckModal , ACK_TYPE} from './components/ackModal';
 import LogoHeader from './components/logoHeader';
+import PopupLoader from './components/popupLoader';
 
 function EntryPage() {
 
@@ -25,6 +26,8 @@ function EntryPage() {
     const [ackMessage, setAckMessage] = useState('');
     const [ackType, setAckType] = useState('');
 
+    const [showLoader, setShowLoader] = useState(false);
+
     const handleShowAck = () => setShowAck(true);
     const handleCloseAck = () => setShowAck(false);
     
@@ -38,7 +41,7 @@ function EntryPage() {
 
     const handleLogin = (event) => {
         event.preventDefault();
-
+        setShowLoader(true);
         const formData =  new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
 
@@ -46,27 +49,30 @@ function EntryPage() {
         .then((response) => {
             localStorage.setItem('jwt', response.data.token);
             event.target.reset();
+            setShowLoader(false);
             navigate('/home');
         }).catch((error) => {
-            console.log(error);
+            setShowLoader(false);
             sendAck(error.response.data, ACK_TYPE.ERROR);
         });
     }
 
     const handleSignup = async (event) => {
         event.preventDefault();
-
+        setShowLoader(true);
         const formData =  new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
 
-        data.isRecruiter = data.isRecruiter !== undefined ;
+        data.isRecruiter = data.isRecruiter !== undefined;
         try{
             await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/register`, data);
+            setShowLoader(false);
             sendAck('Account created and verification email sent successfully', ACK_TYPE.SUCCESS);
             setIsLogin(true);
             event.target.reset();
         }
         catch(error){
+            setShowLoader(false);
             sendAck(error.response.data, ACK_TYPE.ERROR);
         }
     }
@@ -79,6 +85,7 @@ function EntryPage() {
 
     return (
         <div className="entry-page">
+            <PopupLoader showLoader={showLoader}/>
             <AckModal showAck={showAck} message={ackMessage} ackType={ackType} handleCloseAck ={handleCloseAck}/>
             <LogoHeader />
             <div className="entry-content">

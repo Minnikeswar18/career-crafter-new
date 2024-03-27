@@ -3,7 +3,7 @@ import checkJwt from '../helpers/jwt';
 import { ACK_TYPE, AckModal } from './components/ackModal';
 import ApplicationList from './components/applicationList';
 import Loader from './components/loader';
-import LoadingOverlay from 'react-loading-overlay-ts';
+import PopupLoader from './components/popupLoader';
 
 import { useState, useEffect } from 'react';
 import { useNavigate , useParams} from 'react-router-dom';
@@ -30,7 +30,7 @@ function ApplicationsPage() {
   const [loading, setLoading] = useState(true);
   const [applications, setApplications] = useState([]);
 
-  const [sending , setSending] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   
   const sendAck = (type, message) => {
     setAckType(type);
@@ -42,7 +42,7 @@ function ApplicationsPage() {
     try {
       const allApplications = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/getApplications/${jobId}`);
       setApplications(allApplications.data);
-      setTimeout(() => setLoading(false), 500);
+      setLoading(false);
     }
     catch (error) {
       setLoading(false);
@@ -60,40 +60,46 @@ function ApplicationsPage() {
   }, []);
   
   const rejectApplication = async (applicationId) => {
+    setShowLoader(true);
     axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/rejectApplication` , {applicationId})
       .then(async (response) => {
         await onLoad();
+        setShowLoader(false);
         sendAck(ACK_TYPE.SUCCESS, "Application rejected successfully");
       })
       .catch((error) => {
+        setShowLoader(false);
         sendAck(ACK_TYPE.ERROR, "Error rejecting application");
       });
   }
 
   const acceptApplication = async (applicationId) => {
+    setShowLoader(true);
     axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/approveApplication` , {applicationId})
       .then(async (response) => {
         await onLoad();
+        setShowLoader(false);
         sendAck(ACK_TYPE.SUCCESS, "Application approved successfully");
       })
       .catch((error) => {
+        setShowLoader(false);
         sendAck(ACK_TYPE.ERROR, "Error approving application");
       });
   }
 
   const sendChatInvite = (invitation) => {
-    setLoading(true);
+    setShowLoader(true);
     const dest = {
       inviteeUsername: invitation.username,
       inviteeEmail: invitation.email,
     }
     axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/inviteToChat`, dest)
       .then(async (response) => {
-        setLoading(false);
+        setShowLoader(false);
         sendAck(ACK_TYPE.SUCCESS, "Chat invite sent successfully");
       })
       .catch((error) => {
-        setLoading(false);
+        setShowLoader(false);
         sendAck(ACK_TYPE.ERROR, error.response.data);
       });
   }
@@ -106,6 +112,7 @@ function ApplicationsPage() {
     <>
       <BaseHeader />
       <AckModal showAck={showAck} message={ackMessage} ackType={ackType} handleCloseAck={handleCloseAck} />
+      <PopupLoader showLoader={showLoader} />
       <h1 className='hiring-heading'>Applications for this job</h1>
       <div className="tabs">
         <input type="radio" id="tab1" name="tab-control" defaultChecked="tab1" />

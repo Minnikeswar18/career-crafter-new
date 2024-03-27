@@ -3,6 +3,7 @@ import BaseHeader from './components/baseHeader';
 import { ACK_TYPE, AckModal } from './components/ackModal';
 import checkJwt from '../helpers/jwt';
 import Loader from './components/loader';
+import PopupLoader from './components/popupLoader';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +16,7 @@ function ProfilePage() {
         try{
             const myProfile = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/profile/getProfile`);
             setProfileData(myProfile.data);
-            setTimeout(()=> setLoading(false) , 500);
+            setLoading(false);
         }
         catch(error){
             setLoading(false);
@@ -34,6 +35,7 @@ function ProfilePage() {
     const [ackType, setAckType] = useState(ACK_TYPE.SUCCESS);
     const [profileData, setProfileData] = useState({});
     const [loading, setLoading] = useState(true);
+    const [showLoader, setShowLoader] = useState(false);
     const navigate = useNavigate();
 
     const handleCloseAck = () => setShowAck(false);
@@ -47,25 +49,30 @@ function ProfilePage() {
 
     const changeDetails = (event) => {
         event.preventDefault();
+        setShowLoader(true);
         const formData =  new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
         axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/profile/updateProfile`, {profile : data})
         .then(async(response) => {
             await onLoad();
+            setShowLoader(false);
             sendAck("Profile updated successfully", ACK_TYPE.SUCCESS);
             window.location.reload();
         })
         .catch((error) => {
+            setShowLoader(false);
             sendAck(error.response.data, ACK_TYPE.ERROR);
         });
     }
 
     const changeEmail = (event) => {
         event.preventDefault();
+        setShowLoader(true);
         const formData =  new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
         axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/profile/changeEmail`, {data})
         .then(async(response) => {
+            setShowLoader(false);
             sendAck("Email updated successfully , please verify the new email to continue", ACK_TYPE.SUCCESS);
             setTimeout(()=> {
                 localStorage.removeItem('jwt');
@@ -73,19 +80,23 @@ function ProfilePage() {
             }, 1000);
         })
         .catch((error) => {
+            setShowLoader(false);
             sendAck(error.response.data, ACK_TYPE.ERROR);
         });
     }
 
     const changePassword = (event)=>{
         event.preventDefault();
+        setShowLoader(true);
         const formData =  new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
         axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/profile/changePassword`, {data})
         .then(async(response) => {
+            setShowLoader(false);
             sendAck("Password updated successfully", ACK_TYPE.SUCCESS);
         })
         .catch((error) => {
+            setShowLoader(false);
             sendAck(error.response.data, ACK_TYPE.ERROR);
         });
     }
@@ -98,6 +109,7 @@ function ProfilePage() {
         <>
             <BaseHeader />
             <AckModal showAck={showAck} message={ackMessage} ackType={ackType} handleCloseAck={handleCloseAck} />
+            <PopupLoader showLoader={showLoader} />
             <h1 className='hiring-heading'>Your Profile</h1>
             <div className="profile-tabs">
                 <input className='profile-input' type="radio" id="tab1" name="tab-control" defaultChecked="tab1" />

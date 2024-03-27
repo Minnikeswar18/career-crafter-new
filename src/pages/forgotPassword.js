@@ -1,5 +1,6 @@
 import { AckModal , ACK_TYPE} from "./components/ackModal";
 import LogoHeader from "./components/logoHeader";
+import PopupLoader from "./components/popupLoader";
 import axios from 'axios';
 import { useState } from 'react';
 
@@ -7,6 +8,8 @@ function ForgotPassword() {
     const [showAck, setShowAck] = useState(false);
     const [ackMessage, setAckMessage] = useState('');
     const [ackType, setAckType] = useState('');
+    const [showLoader, setShowLoader] = useState(false);
+
     const handleCloseAck = () => setShowAck(false);
     const handleShowAck = () => setShowAck(true);
 
@@ -18,19 +21,23 @@ function ForgotPassword() {
 
     const handleSubmit = async(event) => {
         event.preventDefault();
+        setShowLoader(true);
         const data = new FormData(event.currentTarget);
         const email = data.get('email');
         axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/resetpassword`, {email})
         .then((response) => {
+            setShowLoader(false);
             sendAck("Otp sent successfully to your email" , ACK_TYPE.SUCCESS);
         })
         .catch((error) => {
+            setShowLoader(false);
             sendAck(error.response.data , ACK_TYPE.ERROR);
         });
     }
 
     return (
         <div className="d-flex flex-column" style={{ height: "100vh" }}>
+            <PopupLoader showLoader={showLoader} />
             <AckModal message={ackMessage} handleCloseAck={handleCloseAck} showAck={showAck} ackType={ackType}/>
             <LogoHeader />
             <div className="row">
