@@ -73,6 +73,11 @@
   margin: 0;
 }
 
+.name{
+  font-size: 22px !important;
+  font-weight: bold;
+}
+
 .profile-link{
   color: white !important;
   text-decoration: none !important;

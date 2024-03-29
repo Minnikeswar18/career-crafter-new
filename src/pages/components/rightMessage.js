@@ -1,5 +1,5 @@
 
-function RightMessage({ message , time , username}) {
+function RightMessage({ message, time, username }) {
     return (
         <div className="msg right-msg">
             <div

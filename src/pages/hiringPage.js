@@ -1,4 +1,4 @@
-import {useState , useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
@@ -8,13 +8,13 @@ import PopupLoader from './components/popupLoader';
 import BaseHeader from './components/baseHeader';
 import ProfileList from './components/profileList';
 import InviteForm from './components/inviteForm';
-import {AckModal , ACK_TYPE} from './components/ackModal';
+import { AckModal, ACK_TYPE } from './components/ackModal';
 import checkJwt from '../helpers/jwt';
 import Loader from './components/loader';
 
 import '../styles/hiringPage.css';
 
-function HiringPage(){
+function HiringPage() {
   const [filteredProfiles, setFilteredProfiles] = useState([]);
   const [profiles, setProfiles] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -34,54 +34,54 @@ function HiringPage(){
 
   const navigate = useNavigate();
 
-  const onLoad = async() => {
-    try{
+  const onLoad = async () => {
+    try {
       const allProfiles = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/getFreelancers`);
       setProfiles(allProfiles.data);
       setFilteredProfiles(allProfiles.data);
       setLoading(false);
     }
-    catch(error){
+    catch (error) {
       setLoading(false);
       sendAck(ACK_TYPE.ERROR, 'Error fetching profiles');
     }
   }
 
   useEffect(() => {
-    checkJwt().then(async(response) => {
-      if(!response) {
+    checkJwt().then(async (response) => {
+      if (!response) {
         navigate('/entry');
       }
       setInviter(response);
       await onLoad();
     });
-  },[]);
+  }, []);
 
   const searchFunc = () => {
-        const username = $('#search-username').val();
-        const skill = $('#search-skill').val();
-        const title = $('#search-title').val();
+    const username = $('#search-username').val();
+    const skill = $('#search-skill').val();
+    const title = $('#search-title').val();
 
-        let allProfiles = profiles;
+    let allProfiles = profiles;
 
-        if (username !== '') {
-            allProfiles = allProfiles.filter(profile => profile.username.toLowerCase().includes(username.toLowerCase()));
+    if (username !== '') {
+      allProfiles = allProfiles.filter(profile => profile.username.toLowerCase().includes(username.toLowerCase()));
+    }
+    if (skill !== '') {
+      allProfiles = allProfiles.filter(profile => {
+        for (let userSkill of profile.userSkills) {
+          if (userSkill.toLowerCase().includes(skill.toLowerCase())) {
+            return true;
+          }
         }
-        if (skill !== '') {
-            allProfiles = allProfiles.filter(profile => {
-                for(let userSkill of profile.userSkills) {
-                    if (userSkill.toLowerCase().includes(skill.toLowerCase())){
-                        return true;
-                    }
-                }
-                return false;
-            });
-        }
-        if (title !== '') {
-            allProfiles = allProfiles.filter(profile => profile.userBio.toLowerCase().includes(title.toLowerCase()));
-        }
+        return false;
+      });
+    }
+    if (title !== '') {
+      allProfiles = allProfiles.filter(profile => profile.userBio.toLowerCase().includes(title.toLowerCase()));
+    }
 
-        setFilteredProfiles(allProfiles);
+    setFilteredProfiles(allProfiles);
   }
 
   const generateInviteForm = (invitee) => {
@@ -89,20 +89,20 @@ function HiringPage(){
     handleShowForm();
   }
 
-  const handleInvite = async(event , invitee) =>{
+  const handleInvite = async (event, invitee) => {
     event.preventDefault();
     setShowLoader(true);
-    const formData =  new FormData(event.target)
+    const formData = new FormData(event.target)
     const data = Object.fromEntries(formData.entries())
     data.inviteeEmail = invitee.email;
     data.inviteeUsername = invitee.username;
-    try{
-      await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/invite`, {inviteeId : invitee._id, invitation : data});
+    try {
+      await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/invite`, { inviteeId: invitee._id, invitation: data });
       setShowLoader(false);
       handleCloseForm();
       sendAck(ACK_TYPE.SUCCESS, 'Invitation sent successfully');
     }
-    catch(error){
+    catch (error) {
       setShowLoader(false);
       sendAck(ACK_TYPE.ERROR, error.response.data);
     }
@@ -114,57 +114,58 @@ function HiringPage(){
     handleShowAck();
   }
 
-  if(loading){
+  if (loading) {
     return <Loader />
   }
 
-  return(
+  return (
     <div className='hiring-main'>
-        <AckModal showAck={showAck} handleCloseAck={handleCloseAck} ackType={ackType} message = {ackMessage} />
-        <PopupLoader showLoader={showLoader} />
-        <BaseHeader />
-        <InviteForm invitee={invitee} inviter={inviter} showForm = {showForm} handleCloseForm={handleCloseForm} handleSubmit={handleInvite}/>
-        <h1 className='title mt-4 mb-5'>Discover Freelancers</h1>
-        <div className="hiring-main-div">
-            <div className='filter-div'>
-                <form className="d-flex mb-4" role="search">
-                    <input
-                        id='search-username'
-                        className="form-control"
-                        type="search"
-                        placeholder="Search by Username (Eg : johndoe)"
-                        aria-label="Search"
-                        onChange ={searchFunc}
-                    />
-                </form>
-                <form className="d-flex mb-4" role="search">
-                    <input
-                        id='search-skill'
-                        className="form-control"
-                        type="search"
-                        placeholder="Search by Skill (Eg : React)" 
-                        aria-label="Search"
-                        onChange ={searchFunc}
-                    />
-                </form>
-                <form className="d-flex" role="search">
-                    <input
-                        id='search-title'
-                        className="form-control"
-                        type="search"
-                        placeholder="Search by Title (Eg : Data Scientist)"
-                        aria-label="Search"
-                        onChange ={searchFunc}
-                    />
-                </form>
-            </div>
-            <div className='list-div'>
-                {filteredProfiles.map((profile, index) => {
-                  return <ProfileList key={index} profile={profile} handleShowInviteForm = {generateInviteForm}/>
-                })}
-            </div>
+      <AckModal showAck={showAck} handleCloseAck={handleCloseAck} ackType={ackType} message={ackMessage} />
+      <PopupLoader showLoader={showLoader} />
+      <BaseHeader />
+      <InviteForm invitee={invitee} inviter={inviter} showForm={showForm} handleCloseForm={handleCloseForm} handleSubmit={handleInvite} />
+      <h1 className='title mt-4 mb-5 page-heading'>Discover Freelancers</h1>
+      <div className="hiring-main-div">
+        <div className='filter-div'>
+          <form className="d-flex mb-4" role="search">
+            <input
+              id='search-username'
+              className="form-control"
+              type="search"
+              placeholder="Search by Username (Eg : johndoe)"
+              aria-label="Search"
+              onChange={searchFunc}
+            />
+          </form>
+          <form className="d-flex mb-4" role="search">
+            <input
+              id='search-skill'
+              className="form-control"
+              type="search"
+              placeholder="Search by Skill (Eg : React)"
+              aria-label="Search"
+              onChange={searchFunc}
+            />
+          </form>
+          <form className="d-flex" role="search">
+            <input
+              id='search-title'
+              className="form-control"
+              type="search"
+              placeholder="Search by Title (Eg : Data Scientist)"
+              aria-label="Search"
+              onChange={searchFunc}
+            />
+          </form>
         </div>
+        <div className='list-div'>
+          {filteredProfiles.map((profile, index) => {
+            return <ProfileList key={index} profile={profile} handleShowInviteForm={generateInviteForm} />
+          })}
+        </div>
+      </div>
     </div>
-)};
+  )
+};
 
 export default HiringPage;

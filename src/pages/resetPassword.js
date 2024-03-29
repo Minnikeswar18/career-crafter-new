@@ -1,8 +1,8 @@
 import LogoHeader from "./components/logoHeader";
-import {useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useState } from 'react';
-import { AckModal , ACK_TYPE } from "./components/ackModal";
+import { AckModal, ACK_TYPE } from "./components/ackModal";
 import PopupLoader from "./components/popupLoader";
 
 function ResetPassword() {
@@ -16,7 +16,7 @@ function ResetPassword() {
     const handleCloseAck = () => setShowAck(false);
     const handleShowAck = () => setShowAck(true);
 
-    const sendAck = async(message , type) => {
+    const sendAck = async (message, type) => {
         setAckMessage(message);
         setAckType(type);
         handleShowAck();
@@ -29,19 +29,20 @@ function ResetPassword() {
         const data = Object.fromEntries(formData.entries());
         data.otp = otp;
         axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/changepassword`, data)
-        .then((response) => {
-            setShowLoader(false);
-            sendAck("Password reset successfully" , ACK_TYPE.SUCCESS);
-        })
-        .catch((error) => {
-            setShowLoader(false);
-            sendAck(error.response.data , ACK_TYPE.ERROR);
-        });
+            .then((response) => {
+                setShowLoader(false);
+                sendAck("Password reset successfully", ACK_TYPE.SUCCESS);
+                event.target.reset();
+            })
+            .catch((error) => {
+                setShowLoader(false);
+                sendAck(error.response.data, ACK_TYPE.ERROR);
+            });
     }
     return (
         <div className="d-flex flex-column" style={{ height: "100vh" }}>
             <LogoHeader />
-            <AckModal message={ackMessage} handleCloseAck={handleCloseAck} showAck={showAck} ackType={ackType}/>
+            <AckModal message={ackMessage} handleCloseAck={handleCloseAck} showAck={showAck} ackType={ackType} />
             <PopupLoader showLoader={showLoader} />
             <div className="row">
                 <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -57,7 +58,7 @@ function ResetPassword() {
                                         id="floatingInput"
                                         placeholder="name@example.com"
                                         required
-                                        />
+                                    />
                                     <label htmlFor="floatingInput">Email address</label>
                                 </div>
                                 <div className="form-floating mb-4">
@@ -68,7 +69,7 @@ function ResetPassword() {
                                         id="floatingInput"
                                         placeholder="name@example.com"
                                         required
-                                        />
+                                    />
                                     <label htmlFor="floatingInput">Enter new password</label>
                                 </div>
                                 <div className="form-floating mb-4">

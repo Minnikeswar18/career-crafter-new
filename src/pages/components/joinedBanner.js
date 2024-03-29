@@ -1,6 +1,6 @@
 import '../../styles/components/joinedBanner.css';
 
-function JoinedBanner({message}) {
+function JoinedBanner({ message }) {
     return (
         <div className="msg center-msg">
             <div className="msg-bubble center-bubble">

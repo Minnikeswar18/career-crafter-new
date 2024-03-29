@@ -12,23 +12,23 @@ import axios from 'axios';
 
 function ProfilePage() {
 
-    const onLoad = async() => {
-        try{
+    const onLoad = async () => {
+        try {
             const myProfile = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/profile/getProfile`);
             setProfileData(myProfile.data);
             setLoading(false);
         }
-        catch(error){
+        catch (error) {
             setLoading(false);
             sendAck("Error fetching user data", ACK_TYPE.ERROR);
         }
     }
     useEffect(() => {
-        checkJwt().then(async(res) => {
-            if(!res) navigate('/entry');
+        checkJwt().then(async (res) => {
+            if (!res) navigate('/entry');
             await onLoad();
         })
-    },[]);
+    }, []);
 
     const [showAck, setShowAck] = useState(false);
     const [ackMessage, setAckMessage] = useState('');
@@ -50,58 +50,58 @@ function ProfilePage() {
     const changeDetails = (event) => {
         event.preventDefault();
         setShowLoader(true);
-        const formData =  new FormData(event.target)
+        const formData = new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
-        axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/profile/updateProfile`, {profile : data})
-        .then(async(response) => {
-            await onLoad();
-            setShowLoader(false);
-            sendAck("Profile updated successfully", ACK_TYPE.SUCCESS);
-            window.location.reload();
-        })
-        .catch((error) => {
-            setShowLoader(false);
-            sendAck(error.response.data, ACK_TYPE.ERROR);
-        });
+        axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/profile/updateProfile`, { profile: data })
+            .then(async (response) => {
+                await onLoad();
+                setShowLoader(false);
+                sendAck("Profile updated successfully", ACK_TYPE.SUCCESS);
+                window.location.reload();
+            })
+            .catch((error) => {
+                setShowLoader(false);
+                sendAck(error.response.data, ACK_TYPE.ERROR);
+            });
     }
 
     const changeEmail = (event) => {
         event.preventDefault();
         setShowLoader(true);
-        const formData =  new FormData(event.target)
+        const formData = new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
-        axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/profile/changeEmail`, {data})
-        .then(async(response) => {
-            setShowLoader(false);
-            sendAck("Email updated successfully , please verify the new email to continue", ACK_TYPE.SUCCESS);
-            setTimeout(()=> {
-                localStorage.removeItem('jwt');
-                navigate('/entry');
-            }, 1000);
-        })
-        .catch((error) => {
-            setShowLoader(false);
-            sendAck(error.response.data, ACK_TYPE.ERROR);
-        });
+        axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/profile/changeEmail`, { data })
+            .then(async (response) => {
+                setShowLoader(false);
+                sendAck("Email updated successfully , please verify the new email to continue", ACK_TYPE.SUCCESS);
+                setTimeout(() => {
+                    localStorage.removeItem('jwt');
+                    navigate('/entry');
+                }, 1000);
+            })
+            .catch((error) => {
+                setShowLoader(false);
+                sendAck(error.response.data, ACK_TYPE.ERROR);
+            });
     }
 
-    const changePassword = (event)=>{
+    const changePassword = (event) => {
         event.preventDefault();
         setShowLoader(true);
-        const formData =  new FormData(event.target)
+        const formData = new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
-        axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/profile/changePassword`, {data})
-        .then(async(response) => {
-            setShowLoader(false);
-            sendAck("Password updated successfully", ACK_TYPE.SUCCESS);
-        })
-        .catch((error) => {
-            setShowLoader(false);
-            sendAck(error.response.data, ACK_TYPE.ERROR);
-        });
+        axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/profile/changePassword`, { data })
+            .then(async (response) => {
+                setShowLoader(false);
+                sendAck("Password updated successfully", ACK_TYPE.SUCCESS);
+            })
+            .catch((error) => {
+                setShowLoader(false);
+                sendAck(error.response.data, ACK_TYPE.ERROR);
+            });
     }
 
-    if(loading){
+    if (loading) {
         return <Loader />
     }
 
@@ -139,8 +139,8 @@ function ProfilePage() {
                     <li title="Shipping">
                         <label htmlFor="tab3" role="button">
                             <svg className='profile-svg' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                <path d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z"/>
-                                </svg>
+                                <path d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z" />
+                            </svg>
                             <br />
                             <span>Change Email</span>
                         </label>
@@ -162,38 +162,38 @@ function ProfilePage() {
                     <section className='profile-section'>
                         <div className="input-group mb-3">
                             <span className="input-group-text title-span" id="basic-addon1">First Name</span>
-                            <input type="text" className="form-control profile-input" defaultValue={profileData.firstName} aria-label="Username" aria-describedby="basic-addon1" readOnly/>
+                            <input type="text" className="form-control profile-input" defaultValue={profileData.firstName} aria-label="Username" aria-describedby="basic-addon1" readOnly />
                         </div>
                         <div className="input-group mb-3">
                             <span className="input-group-text title-span" id="basic-addon1">Last Name</span>
-                            <input type="text" className="form-control profile-input" defaultValue={profileData.lastName} aria-label="Username" aria-describedby="basic-addon1" readOnly/>
+                            <input type="text" className="form-control profile-input" defaultValue={profileData.lastName} aria-label="Username" aria-describedby="basic-addon1" readOnly />
                         </div>
                         <div className="input-group mb-3">
                             <span className="input-group-text title-span" id="basic-addon1">Username</span>
-                            <input type="text" className="form-control profile-input" defaultValue={profileData.username} aria-label="Username" aria-describedby="basic-addon1" readOnly/>
+                            <input type="text" className="form-control profile-input" defaultValue={profileData.username} aria-label="Username" aria-describedby="basic-addon1" readOnly />
                         </div>
                         <div className="input-group mb-3">
                             <span className="input-group-text title-span" id="basic-addon1">Email</span>
-                            <input type="text" className="form-control profile-input" defaultValue={profileData.email} aria-describedby="basic-addon1" readOnly/>
+                            <input type="text" className="form-control profile-input" defaultValue={profileData.email} aria-describedby="basic-addon1" readOnly />
                         </div>
                         <div className="input-group mb-3">
                             <span className="input-group-text title-span" id="basic-addon1">Company Name</span>
-                            <input type="text" className="form-control profile-input" defaultValue={profileData.companyName} aria-describedby="basic-addon1" readOnly/>
+                            <input type="text" className="form-control profile-input" defaultValue={profileData.companyName} aria-describedby="basic-addon1" readOnly />
                         </div>
                     </section>
                     <section className='profile-section'>
                         <form onSubmit={changeDetails}>
                             <div className="input-group mb-3">
                                 <span className="input-group-text title-span" id="basic-addon1">First Name</span>
-                                <input type="text" className="form-control profile-input" name='firstName' defaultValue={profileData.firstName} aria-label="Username" aria-describedby="basic-addon1"/>
+                                <input type="text" className="form-control profile-input" name='firstName' defaultValue={profileData.firstName} aria-label="Username" aria-describedby="basic-addon1" />
                             </div>
                             <div className="input-group mb-3">
                                 <span className="input-group-text title-span" id="basic-addon1">Last Name</span>
-                                <input type="text" className="form-control profile-input" name='lastName' defaultValue={profileData.lastName} aria-label="Username" aria-describedby="basic-addon1"/>
+                                <input type="text" className="form-control profile-input" name='lastName' defaultValue={profileData.lastName} aria-label="Username" aria-describedby="basic-addon1" />
                             </div>
                             <div className="input-group mb-3">
                                 <span className="input-group-text title-span" id="basic-addon1">Company Name</span>
-                                <input type="text" className="form-control profile-input" name='companyName' defaultValue={profileData.companyName} aria-describedby="basic-addon1"/>
+                                <input type="text" className="form-control profile-input" name='companyName' defaultValue={profileData.companyName} aria-describedby="basic-addon1" />
                             </div>
                             <Button variant="success" type='submit' className="profile-button mt-3">Save details</Button>
                         </form>
@@ -202,11 +202,11 @@ function ProfilePage() {
                         <form onSubmit={changeEmail}>
                             <div className="input-group mb-3">
                                 <span className="input-group-text title-span" id="basic-addon1">New Email</span>
-                                <input type="email" className="form-control profile-input" name='email' aria-label="Username" aria-describedby="basic-addon1" required/>
+                                <input type="email" className="form-control profile-input" name='email' aria-label="Username" aria-describedby="basic-addon1" required />
                             </div>
                             <div className="input-group mb-3">
                                 <span className="input-group-text title-span" id="basic-addon1">Enter your password</span>
-                                <input type="password" name='password' className="form-control profile-input" aria-describedby="basic-addon1" required/>
+                                <input type="password" name='password' className="form-control profile-input" aria-describedby="basic-addon1" required />
                             </div>
                             <Button variant="success" className="profile-button mt-3" type='submit'>Change Email</Button>
                         </form>
@@ -215,15 +215,15 @@ function ProfilePage() {
                         <form onSubmit={changePassword}>
                             <div className="input-group mb-3">
                                 <span className="input-group-text title-span" id="basic-addon1">Enter new password</span>
-                                <input type="password" name='newPassword' className="form-control profile-input" aria-describedby="basic-addon1" required/>
+                                <input type="password" name='newPassword' className="form-control profile-input" aria-describedby="basic-addon1" required />
                             </div>
                             <div className="input-group mb-3">
                                 <span className="input-group-text title-span" id="basic-addon1">Confirm new password</span>
-                                <input type="password" name ="confirmNewPassword" className="form-control profile-input" aria-describedby="basic-addon1" required/>
+                                <input type="password" name="confirmNewPassword" className="form-control profile-input" aria-describedby="basic-addon1" required />
                             </div>
                             <div className="input-group mb-3">
                                 <span className="input-group-text title-span" id="basic-addon1">Enter current password</span>
-                                <input type="password" name='currentPassword' className="form-control profile-input" aria-describedby="basic-addon1" required/>
+                                <input type="password" name='currentPassword' className="form-control profile-input" aria-describedby="basic-addon1" required />
                             </div>
                             <Button variant="success" type='submit' className="profile-button mt-3">Change Password</Button>
                         </form>

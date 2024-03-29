@@ -6,7 +6,7 @@ import Loader from './components/loader';
 import PopupLoader from './components/popupLoader';
 
 import { useState, useEffect } from 'react';
-import { useNavigate , useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const APPLICATION_STATUS = {
@@ -16,28 +16,28 @@ const APPLICATION_STATUS = {
 }
 
 function ApplicationsPage() {
-  
+
   const navigate = useNavigate();
   const jobId = useParams().jobId;
-  
+
   const [showAck, setShowAck] = useState(false);
   const [ackMessage, setAckMessage] = useState('');
   const [ackType, setAckType] = useState('');
-  
+
   const handleCloseAck = () => setShowAck(false);
   const handleShowAck = () => setShowAck(true);
-  
+
   const [loading, setLoading] = useState(true);
   const [applications, setApplications] = useState([]);
 
   const [showLoader, setShowLoader] = useState(false);
-  
+
   const sendAck = (type, message) => {
     setAckType(type);
     setAckMessage(message);
     handleShowAck();
   }
-  
+
   const onLoad = async () => {
     try {
       const allApplications = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/getApplications/${jobId}`);
@@ -49,7 +49,7 @@ function ApplicationsPage() {
       sendAck(ACK_TYPE.ERROR, 'Error fetching applications for this job');
     }
   }
-  
+
   useEffect(() => {
     checkJwt().then(async (response) => {
       if (!response) {
@@ -58,10 +58,10 @@ function ApplicationsPage() {
       await onLoad();
     });
   }, []);
-  
+
   const rejectApplication = async (applicationId) => {
     setShowLoader(true);
-    axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/rejectApplication` , {applicationId})
+    axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/rejectApplication`, { applicationId })
       .then(async (response) => {
         await onLoad();
         setShowLoader(false);
@@ -75,7 +75,7 @@ function ApplicationsPage() {
 
   const acceptApplication = async (applicationId) => {
     setShowLoader(true);
-    axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/approveApplication` , {applicationId})
+    axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/approveApplication`, { applicationId })
       .then(async (response) => {
         await onLoad();
         setShowLoader(false);
@@ -150,29 +150,29 @@ function ApplicationsPage() {
         <div className="slider">
           <div className="indicator" />
         </div>
-        <div className="content">        
+        <div className="content">
           <section>
             {
-            applications.filter(application => application.status === APPLICATION_STATUS.ACCEPTED).length > 0 
-            ? 
-            applications.filter(application => application.status === APPLICATION_STATUS.ACCEPTED).map((application, index) => <ApplicationList application={application} key={index}  rejectApplication={rejectApplication} acceptApplication={acceptApplication} sendChatInvite={sendChatInvite}/>) 
-            : 
-            <h3 className='mt-4'>No data found</h3>}
+              applications.filter(application => application.status === APPLICATION_STATUS.ACCEPTED).length > 0
+                ?
+                applications.filter(application => application.status === APPLICATION_STATUS.ACCEPTED).map((application, index) => <ApplicationList application={application} key={index} rejectApplication={rejectApplication} acceptApplication={acceptApplication} sendChatInvite={sendChatInvite} />)
+                :
+                <h3 className='mt-4'>No data found</h3>}
           </section>
 
           <section>
-            {applications.filter(application => application.status === APPLICATION_STATUS.PENDING).length > 0 
-            ?
-             applications.filter(application => application.status === APPLICATION_STATUS.PENDING).map((application, index) => <ApplicationList application={application} key={index}  rejectApplication={rejectApplication} acceptApplication={acceptApplication} sendChatInvite={sendChatInvite}/>) 
-             :
+            {applications.filter(application => application.status === APPLICATION_STATUS.PENDING).length > 0
+              ?
+              applications.filter(application => application.status === APPLICATION_STATUS.PENDING).map((application, index) => <ApplicationList application={application} key={index} rejectApplication={rejectApplication} acceptApplication={acceptApplication} sendChatInvite={sendChatInvite} />)
+              :
               <h3 className='mt-4'>No data found</h3>}
           </section>
 
           <section>
-            {applications.filter(application => application.status === APPLICATION_STATUS.REJECTED).length > 0 
-            ?
-             applications.filter(application => application.status === APPLICATION_STATUS.REJECTED).map((application, index) => <ApplicationList application={application} rejectApplication={rejectApplication} acceptApplication={acceptApplication} key={index} sendChatInvite={sendChatInvite} />) 
-             :
+            {applications.filter(application => application.status === APPLICATION_STATUS.REJECTED).length > 0
+              ?
+              applications.filter(application => application.status === APPLICATION_STATUS.REJECTED).map((application, index) => <ApplicationList application={application} rejectApplication={rejectApplication} acceptApplication={acceptApplication} key={index} sendChatInvite={sendChatInvite} />)
+              :
               <h3 className='mt-4'>No data found</h3>}
           </section>
         </div>

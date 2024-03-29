@@ -1,6 +1,6 @@
 
 
-function LeftMessage({username , time , message}) {
+function LeftMessage({ username, time, message }) {
     return (
         <div className="msg left-msg">
             <div

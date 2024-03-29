@@ -1,183 +1,174 @@
-import '../styles/homePage.css';
-import Header from './components/baseHeader';
-import JobElement from './components/jobListElement'
 import { useEffect, useState } from 'react';
-import AddJobForm from './components/addJobForm';
-import {AckModal , ACK_TYPE} from './components/ackModal';
-import $ from 'jquery';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import Header from './components/baseHeader';
+import InviteForm from './components/inviteForm';
+import ProfileList from './components/profileList';
+import { AckModal, ACK_TYPE } from './components/ackModal';
 import checkJwt from '../helpers/jwt';
 import Loader from './components/loader';
 import PopupLoader from './components/popupLoader';
+import { Dropdown } from 'semantic-ui-react';
+import '../styles/jobsPage.css';
+import 'semantic-ui-css/semantic.min.css';
 
-function HomePage() {
-  const [originalJobList, setOriginalJobList] = useState([]);
-  const [jobList, setJobList] = useState([]);
-  const [sortState , setSortState] = useState(process.env.REACT_APP_INITIAL_SORT_STATE);
-  const [showAck, setShowAck] = useState(false);
-  const [ackMessage, setAckMessage] = useState('');
-  const [ackType, setAckType] = useState('');
+function JobsPage() {
+    const [selectedJobId, setSelectedJobId] = useState(null);
+    const [jobList, setJobList] = useState([]);
+    const [profiles, setProfiles] = useState([]);
+    const [showAck, setShowAck] = useState(false);
+    const [showForm, setShowForm] = useState(false);
+    const [ackMessage, setAckMessage] = useState('');
+    const [ackType, setAckType] = useState('');
+    const [invitee, setInvitee] = useState({});
+    const [inviter, setInviter] = useState({});
 
-  const [loading , setLoading] = useState(true);
-  const [showLoader, setShowLoader] = useState(false);
-  
-  const handleCloseAck = () => setShowAck(false);
-  const handleShowAck = () => setShowAck(true);
 
-  const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+    const [showLoader, setShowLoader] = useState(false);
 
-  useEffect(() => {
-    checkJwt().then(async(isJwtValid) => {
-      if(!isJwtValid) {
-        navigate('/entry');
-      }
-      await onLoad();
-    });
-  },[]);
+    const handleCloseAck = () => setShowAck(false);
+    const handleShowAck = () => setShowAck(true);
 
-  const onLoad = async() => {
-    axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/myjobs`)
-    .then((response) => {
-      setOriginalJobList(response.data);
-      setJobList(response.data);
-      setLoading(false);
-    })
-    .catch((error) => {
-      setLoading(false);
-      sendAck('Error fetching jobs', ACK_TYPE.ERROR);
-    });
-  }
+    const handleCloseForm = () => setShowForm(false);
+    const handleShowForm = () => setShowForm(true);
 
-  const sendAck = async(message , type) => {
-    setAckMessage(message);
-    setAckType(type);
-    handleShowAck();
-  }
-  
-  const addJob = async (event , handleClose) =>{
-    if(event) event.preventDefault();
-    setShowLoader(true);
-    const getJob = (jobData) => {
-      const newJob = {
-        companyName: jobData.companyName,
-        jobTitle: jobData.jobRole,
-        jobType: jobData.jobType,
-        jobSalary: jobData.salary,
-        jobMode: jobData.workMode,
-        jobScope : jobData.jobScope,
-        jobExperience : jobData.experience,
-        salaryType : jobData.salaryType,
-        jobDescription : jobData.description,
-        jobSkills : jobData.skills ? jobData.skills.split(',').map(skill => skill.trim()) : [],
-      }
-      return newJob;
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        checkJwt().then(async (response) => {
+            if (!response) {
+                navigate('/entry');
+            }
+            setInviter(response);
+            await onLoad();
+        });
+    }, []);
+
+    const handleJobChange = async (event, data) => {
+        if (event) event.preventDefault();
+        setShowLoader(true);
+        const jobId = data.value;
+        setSelectedJobId(jobId);
+        try {
+            const response = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/home/similarProfiles/${jobId}`);
+            const profiles = response.data;
+            setProfiles(profiles);
+            setShowLoader(false);
+        } catch (error) {
+            setShowLoader(false);
+            sendAck('Error fetching profiles', ACK_TYPE.ERROR);
+        }
     }
-    const formData =  new FormData(event.target)
-    const data = Object.fromEntries(formData.entries())
-    const newJob = getJob(data);
 
-    $('#search-bar').val('');
-    
-    axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/add`, newJob)
-    .then(async(response) => {
-      await onLoad();
-      handleClose();
-      setShowLoader(false);
-      sendAck('Job added successfully' , ACK_TYPE.SUCCESS);
-    })
-    .catch((error) => {
-      setShowLoader(false);
-      sendAck(error.response.data, ACK_TYPE.ERROR);
-    });
-  }
-  
-  const deleteJob = async(jobId) => {
-    setShowLoader(true);
-    axios.delete(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/job/delete/${jobId}`)
-    .then(async(response) => {
-        $('#search-bar').val('');
-        await onLoad();
-        setShowLoader(false);
-        sendAck('Job deleted successfully', ACK_TYPE.SUCCESS);
-      })
-      .catch((error) => {
-        setShowLoader(false);
-        sendAck('Error deleting the job', ACK_TYPE.ERROR);
-      });
-  }
+    const generateInviteForm = (invitee) => {
+        setInvitee(invitee);
+        handleShowForm();
+    }
 
-  const sortJobs = (index) => {
-    let newJobList = jobList;
-    $('#' + sortState).removeClass('active');
-    if(index === 0){
-      newJobList = jobList.sort((a, b) => new Date(b.datePosted) - new Date(a.datePosted));
+    const handleInvite = async (event, invitee) => {
+        event.preventDefault();
+        setShowLoader(true);
+        const formData = new FormData(event.target)
+        const data = Object.fromEntries(formData.entries())
+        data.inviteeEmail = invitee.email;
+        data.inviteeUsername = invitee.username;
+        try {
+            await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/invite`, { inviteeId: invitee._id, invitation: data });
+            setShowLoader(false);
+            handleCloseForm();
+            sendAck(ACK_TYPE.SUCCESS, 'Invitation sent successfully');
+        }
+        catch (error) {
+            setShowLoader(false);
+            sendAck(ACK_TYPE.ERROR, error.response.data);
+        }
     }
-    else if(index === 1){
-      newJobList = jobList.sort((a, b) => new Date(a.datePosted) - new Date(b.datePosted));
-    }
-    else if(index === 2){
-      newJobList = jobList.sort((a, b) => a.jobTitle.localeCompare(b.jobTitle));
-    }
-    else if(index === 3){
-      newJobList = jobList.sort((a, b) => b.jobTitle.localeCompare(a.jobTitle));
-    }
-    setSortState(index);
-    $('#' + index).addClass('active');
-    setJobList(newJobList);
-  }
 
-  const searchJob = () => {
-    let searchValue = $('#search-bar').val();
-    if(searchValue === ''){
-      setJobList(originalJobList);
-      return;
+    const onLoad = async () => {
+        const getDate = (date) => {
+            if (!(date instanceof Date)) {
+                date = new Date(date);
+            }
+            const options = { day: '2-digit', month: 'long', year: 'numeric' };
+            const formattedDate = date.toLocaleDateString('en-US', options);
+            return formattedDate;
+        }
+
+        axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/home/myjobs`)
+            .then((response) => {
+
+                const jobs = response.data;
+                jobs.forEach((element, index) => {
+                    jobs[index] = {
+                        id: element._id,
+                        datePosted: getDate(element.datePosted),
+                        jobTitle: element.jobTitle,
+                        companyName: element.companyName,
+                    };
+                });
+                setJobList(jobs);
+                setLoading(false);
+            })
+            .catch((error) => {
+                setLoading(false);
+                sendAck('Error fetching jobs', ACK_TYPE.ERROR);
+            });
     }
-    searchValue = searchValue.toLowerCase();
-    const newJobList = originalJobList.filter((job) => job.jobTitle.toLowerCase().includes(searchValue)) ;
-    setJobList(newJobList);
-  }
 
-  if(loading){
-    return <Loader/>
-  }
+    const sendAck = async (message, type) => {
+        setAckMessage(message);
+        setAckType(type);
+        handleShowAck();
+    }
 
-  return (
-    <div className='home-page'>
-      <Header />
-      <AddJobForm addjobform={addJob}/>
-      <AckModal message = {ackMessage} ackType = {ackType} showAck = {showAck} handleCloseAck = {handleCloseAck}/>
-      <PopupLoader showLoader={showLoader}/>
-      <h1>Jobs Posted by You</h1>
-      <div className='home-page-header'>
-        <div className ="dropdown">
-          <button className ="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Sort by
-          </button>
-          <ul className ="dropdown-menu dropdown-menu-dark">
-            <li><a id='0' className ="dropdown-item" onClick={() => sortJobs(0)} >Date latest</a></li>
-            <li><a id='1' className ="dropdown-item" onClick={() => sortJobs(1)} >Date oldest</a></li>
-            <li><a id='2' className ="dropdown-item" onClick={() => sortJobs(2)} >Title ascending</a></li>
-            <li><a id='3' className ="dropdown-item" onClick={() => sortJobs(3)} >Title descending</a></li>
-          </ul>
+    if (loading) {
+        return <Loader />
+    }
+
+    return (
+        <div className='home-page'>
+            <Header />
+            <AckModal message={ackMessage} ackType={ackType} showAck={showAck} handleCloseAck={handleCloseAck} />
+            <InviteForm invitee={invitee} inviter={inviter} showForm={showForm} handleCloseForm={handleCloseForm} handleSubmit={handleInvite} />
+            <PopupLoader showLoader={showLoader} />
+            <h1 className='page-heading'>Top Matching Profiles for your Jobs</h1>
+            <div className='home-page-header'>
+                <Dropdown
+                    fluid
+                    search
+                    selection
+                    options={jobList.map(option => ({
+                        key: option.id,
+                        value: option.id,
+                        text: `${option.jobTitle} at ${option.companyName} (${option.datePosted})`
+                    }))}
+                    placeholder='Select Job'
+                    onChange={handleJobChange}
+                />
+            </div>
+            <div className='home-page-content'>
+                {
+                    selectedJobId ?
+                        profiles.length > 0 ?
+                            profiles.map((profile, index) => {
+                                return (
+                                    <ProfileList key={index} profile={profile} handleShowInviteForm={generateInviteForm} />
+                                );
+                            })
+                            :
+                            <div className='home-page-content-empty'>
+                                <h2>No profiles found for this job</h2>
+                            </div>
+                        :
+                        <div className='home-page-content-empty'>
+                            <h2>Select a job to view matching profiles</h2>
+                        </div>
+                }
+            </div>
         </div>
-        <form className="d-flex" role="search">
-          <input
-            id='search-bar'
-            className="form-control"
-            type="search"
-            placeholder="Search by Job title"
-            aria-label="Search"
-            onChange={searchJob}
-          />
-        </form>
-      </div>
-      <div className='home-page-content'>
-        {jobList.map((job, index) =>  <JobElement key={index} index={index} job={job} deleteFunction={deleteJob}/>
-        )}
-      </div>
-    </div>
-  );
+    );
 }
 
-export default HomePage;
+export default JobsPage;

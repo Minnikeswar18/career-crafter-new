@@ -7,11 +7,16 @@
     border-radius: 14px;
     margin: 10px;
     width: 65vw;
+    max-width: 1000px;
     justify-content: space-around;
 }
 
 .main-bottom h5{
     margin-left : 20px;
+    font-size: larger !important;
+}
+.main-bottom  b{
+    font-size: large !important;
 }
 
 .main-div{
@@ -29,6 +34,8 @@
     align-items: center;
     padding : 4px;
     color: black !important;
+    font-size: 35px !important;
+    margin-bottom: 5px !important;
 }
 
 .main-bottom{

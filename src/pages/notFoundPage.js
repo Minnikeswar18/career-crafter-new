@@ -3,7 +3,7 @@ import image from '../../src/assets/img/pnf.png'
 function NotFoundPage() {
   return (
     <div className='outer-div'>
-      <img src={image} alt="404" className='pnf-image'/>
+      <img src={image} alt="404" className='pnf-image' />
     </div>
   );
 }

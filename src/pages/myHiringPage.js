@@ -96,7 +96,7 @@ function MyHiringPage() {
       <BaseHeader />
       <PopupLoader showLoader={showLoader} />
       <AckModal showAck={showAck} message={ackMessage} ackType={ackType} handleCloseAck={handleCloseAck} />
-      <h1 className='hiring-heading'>Your Hirings</h1>
+      <h1 className='hiring-heading page-heading'>Your Hirings</h1>
       <div className="tabs">
         <input type="radio" id="tab1" name="tab-control" defaultChecked="tab1" />
         <input type="radio" id="tab2" name="tab-control" />
@@ -138,9 +138,9 @@ function MyHiringPage() {
             {
               invitations.filter(invitation => invitation.status === INVITATION_STATUS.ACCEPTED).length > 0
                 ?
-                invitations.filter(invitation => invitation.status === INVITATION_STATUS.ACCEPTED).map((invitation, index) => <InviteList invitation={invitation} key={index} sendChatInvite={sendChatInvite}/>)
+                invitations.filter(invitation => invitation.status === INVITATION_STATUS.ACCEPTED).map((invitation, index) => <InviteList invitation={invitation} key={index} sendChatInvite={sendChatInvite} />)
                 :
-                <h3 className='mt-4'>No data found</h3>}
+                <h3 className='mt-4 page-heading'>No data found</h3>}
           </section>
 
           <section>
@@ -148,7 +148,7 @@ function MyHiringPage() {
               ?
               invitations.filter(invitation => invitation.status === INVITATION_STATUS.PENDING).map((invitation, index) => <InviteList invitation={invitation} key={index} deleteInvitation={deleteInvitation} />)
               :
-              <h3 className='mt-4'>No data found</h3>}
+              <h3 className='mt-4 page-heading'>No data found</h3>}
           </section>
 
           <section>
@@ -156,7 +156,7 @@ function MyHiringPage() {
               ?
               invitations.filter(invitation => invitation.status === INVITATION_STATUS.REJECTED).map((invitation, index) => <InviteList invitation={invitation} key={index} />)
               :
-              <h3 className='mt-4'>No data found</h3>}
+              <h3 className='mt-4 page-heading'>No data found</h3>}
           </section>
         </div>
       </div>

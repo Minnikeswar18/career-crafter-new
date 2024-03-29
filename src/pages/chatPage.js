@@ -9,7 +9,7 @@ import JoinedBanner from "./components/joinedBanner";
 
 function ChatPage() {
     const [message, setMessage] = useState('');
-    const [socket, setSocket] = useState(null); 
+    const [socket, setSocket] = useState(null);
     const { username, roomId } = useParams();
     const [isError, setIsError] = useState(false);
     const [messages, setMessages] = useState([]);
@@ -21,17 +21,17 @@ function ChatPage() {
         }
 
         const newSocket = io(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}`);
-        setSocket(newSocket); 
+        setSocket(newSocket);
 
         return () => {
             newSocket.disconnect();
         };
-    },[roomId]);
+    }, [roomId]);
 
     useEffect(() => {
         if (socket && roomId) {
-            socket.emit('joinRoom', {roomId , username});
-            setMessages( prevMessages => [...prevMessages , <JoinedBanner key={prevMessages.length} message={"You have joined the chat"} />]);
+            socket.emit('joinRoom', { roomId, username });
+            setMessages(prevMessages => [...prevMessages, <JoinedBanner key={prevMessages.length} message={"You have joined the chat"} />]);
         }
     }, [socket, roomId]);
 
@@ -39,19 +39,19 @@ function ChatPage() {
         if (socket) {
             socket.on("receiveMessage", (messageContent) => {
                 const { username, message, time } = messageContent;
-                setMessages( prevMessages => [...prevMessages , <LeftMessage key={prevMessages.length} username={username} message={message} time={time} />]);
+                setMessages(prevMessages => [...prevMessages, <LeftMessage key={prevMessages.length} username={username} message={message} time={time} />]);
             });
 
-            socket.on("joined" , (username) => {
-                setMessages( prevMessages => [...prevMessages , <JoinedBanner key={prevMessages.length} message={`${username} has joined the chat`} />]);
+            socket.on("joined", (username) => {
+                setMessages(prevMessages => [...prevMessages, <JoinedBanner key={prevMessages.length} message={`${username} has joined the chat`} />]);
             })
         }
-    } , [socket]);
-    
-    const sendMessage = async(event) => {
+    }, [socket]);
+
+    const sendMessage = async (event) => {
         event.preventDefault();
         if (!message.trim()) return;
-        const date = new Date();    
+        const date = new Date();
         const messageObject = {
             username,
             message,
@@ -59,7 +59,7 @@ function ChatPage() {
             time: `${date.getHours()}:${date.getMinutes()}`
         }
         socket.emit('sendMessage', messageObject);
-        setMessages( prevMessages => [...prevMessages , <RightMessage key={prevMessages.length} username={username} message={message} time={messageObject.time} />]);
+        setMessages(prevMessages => [...prevMessages, <RightMessage key={prevMessages.length} username={username} message={message} time={messageObject.time} />]);
         setMessage('');
     };
 

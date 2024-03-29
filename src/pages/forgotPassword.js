@@ -1,4 +1,4 @@
-import { AckModal , ACK_TYPE} from "./components/ackModal";
+import { AckModal, ACK_TYPE } from "./components/ackModal";
 import LogoHeader from "./components/logoHeader";
 import PopupLoader from "./components/popupLoader";
 import axios from 'axios';
@@ -13,32 +13,32 @@ function ForgotPassword() {
     const handleCloseAck = () => setShowAck(false);
     const handleShowAck = () => setShowAck(true);
 
-    const sendAck = async(message , type) => {
+    const sendAck = async (message, type) => {
         setAckMessage(message);
         setAckType(type);
         handleShowAck();
     }
 
-    const handleSubmit = async(event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         setShowLoader(true);
         const data = new FormData(event.currentTarget);
         const email = data.get('email');
-        axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/resetpassword`, {email})
-        .then((response) => {
-            setShowLoader(false);
-            sendAck("Otp sent successfully to your email" , ACK_TYPE.SUCCESS);
-        })
-        .catch((error) => {
-            setShowLoader(false);
-            sendAck(error.response.data , ACK_TYPE.ERROR);
-        });
+        axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/resetpassword`, { email })
+            .then((response) => {
+                setShowLoader(false);
+                sendAck("Otp sent successfully to your email", ACK_TYPE.SUCCESS);
+            })
+            .catch((error) => {
+                setShowLoader(false);
+                sendAck(error.response.data, ACK_TYPE.ERROR);
+            });
     }
 
     return (
         <div className="d-flex flex-column" style={{ height: "100vh" }}>
             <PopupLoader showLoader={showLoader} />
-            <AckModal message={ackMessage} handleCloseAck={handleCloseAck} showAck={showAck} ackType={ackType}/>
+            <AckModal message={ackMessage} handleCloseAck={handleCloseAck} showAck={showAck} ackType={ackType} />
             <LogoHeader />
             <div className="row">
                 <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -52,7 +52,7 @@ function ForgotPassword() {
                                         className="form-control"
                                         id="floatingInput"
                                         placeholder="name@example.com"
-                                        name ="email"
+                                        name="email"
                                         required
                                     />
                                     <label htmlFor="floatingInput">Email address</label>
