@@ -99,7 +99,7 @@ function EntryPage() {
                     <div className="forms">
                         <div className="form-content">
                             <div className="login-form">
-                                <div className="title">Login</div>
+                                <div className="title page-heading">Login</div>
                                 <form action="#" onSubmit={handleLogin}>
                                     <div className="input-boxes">
                                         <div className="input-box">
@@ -128,7 +128,7 @@ function EntryPage() {
                                 </form>
                             </div>
                             <div className="signup-form">
-                                <div className="title">Signup</div>
+                                <div className="title page-heading">Signup</div>
                                 <form onSubmit={handleSignup}>
                                     <div className="input-boxes">
                                         <div className="input-box">

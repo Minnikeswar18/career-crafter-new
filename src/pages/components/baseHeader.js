@@ -7,7 +7,7 @@ function BaseHeader() {
         console.log('signing out')
         if (localStorage.getItem('jwt')) {
             localStorage.removeItem('jwt')
-            window.location.href = '/entry'
+            window.location.href = '/'
         }
     }
 

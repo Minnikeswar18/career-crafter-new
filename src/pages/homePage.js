@@ -39,7 +39,7 @@ function JobsPage() {
     useEffect(() => {
         checkJwt().then(async (response) => {
             if (!response) {
-                navigate('/entry');
+                navigate('/');
             }
             setInviter(response);
             await onLoad();
@@ -159,11 +159,11 @@ function JobsPage() {
                             })
                             :
                             <div className='home-page-content-empty'>
-                                <h2>No profiles found for this job</h2>
+                                {/* <h2 className='page-heading'>No profiles found for this job</h2> */}
                             </div>
                         :
                         <div className='home-page-content-empty'>
-                            <h2>Select a job to view matching profiles</h2>
+                            {/* <h2 className='page-heading'>Select a job to view matching profiles</h2> */}
                         </div>
                 }
             </div>

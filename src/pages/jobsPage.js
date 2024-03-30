@@ -30,7 +30,7 @@ function JobsPage() {
   useEffect(() => {
     checkJwt().then(async (isJwtValid) => {
       if (!isJwtValid) {
-        navigate('/entry');
+        navigate('/');
       }
       await onLoad();
     });

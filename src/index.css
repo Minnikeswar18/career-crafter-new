@@ -29,3 +29,13 @@ code {
 .form-heading {
   font-size: 25px !important;
 }
+
+.tab-heading{
+  font-size: 20px !important;
+}
+
+.tabss{
+  display: flex;
+  align-items: center;
+  text-align: center;
+}

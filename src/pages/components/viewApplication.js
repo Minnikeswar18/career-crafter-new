@@ -6,7 +6,7 @@ function ViewApplication({ application, showApplication, handleClose }) {
     return (
         <Modal show={showApplication} onHide={handleClose} size='lg' backdrop="static">
             <Modal.Header closeButton>
-                <Modal.Title>Application Details</Modal.Title>
+                <Modal.Title className="form-heading">Application Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form >

@@ -26,8 +26,8 @@ function App() {
       </Helmet>
       <Router>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/entry" element={<EntryPage />} />
+          {/* <Route path="/" element={<LandingPage />} /> */}
+          <Route path="/" element={<EntryPage />} />
           <Route path="/home" element={<HomePage /> } />
           <Route path="/jobs" element={<JobsPage /> } />
           <Route path="/hire" element={<HiringPage />} />
@@ -36,7 +36,7 @@ function App() {
           <Route path="/applications/:jobId" element={<ApplicationsPage/>} />
           <Route path="/forgotPassword" element={<ForgotPassword/>} />
           <Route path="/resetPassword/:otp" element={<ResetPassword/>} />
-          <Route path="/chat/:username/:roomId" element={<ChatPage/>} />
+          <Route path="/chat/:key" element={<ChatPage/>} />
           <Route path="*" element={<NotFoundPage/>} />
         </Routes>
       </Router>

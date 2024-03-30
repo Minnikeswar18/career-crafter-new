@@ -10,9 +10,12 @@ import JoinedBanner from "./components/joinedBanner";
 function ChatPage() {
     const [message, setMessage] = useState('');
     const [socket, setSocket] = useState(null);
-    const { username, roomId } = useParams();
     const [isError, setIsError] = useState(false);
     const [messages, setMessages] = useState([]);
+
+    const params = btoa(useParams().key).split('/');
+    const username = params[0];
+    const roomId = params[1];
 
     useEffect(() => {
         if (!roomId) {

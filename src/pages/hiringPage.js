@@ -50,7 +50,7 @@ function HiringPage() {
   useEffect(() => {
     checkJwt().then(async (response) => {
       if (!response) {
-        navigate('/entry');
+        navigate('/');
       }
       setInviter(response);
       await onLoad();

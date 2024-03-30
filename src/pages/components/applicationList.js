@@ -22,7 +22,7 @@ function ApplicationList({ application, rejectApplication, acceptApplication, se
         }
         const options = { day: '2-digit', month: 'long', year: 'numeric' };
         const formattedDate = date.toLocaleDateString('en-US', options);
-        return formattedDate;
+        return formattedDate
     }
 
     application.startDate = getDate(application.startDate);
@@ -31,8 +31,8 @@ function ApplicationList({ application, rejectApplication, acceptApplication, se
         <div className='application-list-main shadow'>
             <ViewApplication application={application} showApplication={showApplication} handleClose={handleCloseApplication} />
             <div className="application-details">
-                <h5 className='work-type'> <b>Applied by : </b> {application.appliedBy.firstName} </h5>
-                <h5 className='job-id'> <b>Applied on : </b> {getDate(application.appliedAt)} </h5>
+                <h5 className='work-type tab-heading'> <b>Applied by : </b> {application.appliedBy.firstName} </h5>
+                <h5 className='job-id tab-heading'> <b>Applied on : </b> {getDate(application.appliedAt)} </h5>
             </div>
             <div className="application-actions">
                 <div className='application-buttons'>
