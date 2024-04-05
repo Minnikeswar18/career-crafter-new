@@ -36,7 +36,7 @@ function HiringPage() {
 
   const onLoad = async () => {
     try {
-      const allProfiles = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/getFreelancers`);
+      const allProfiles = await axios.get(`${REACT_APP_BACKEND_URL}/hire/getFreelancers`);
       setProfiles(allProfiles.data);
       setFilteredProfiles(allProfiles.data);
       setLoading(false);
@@ -97,7 +97,7 @@ function HiringPage() {
     data.inviteeEmail = invitee.email;
     data.inviteeUsername = invitee.username;
     try {
-      await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/invite`, { inviteeId: invitee._id, invitation: data });
+      await axios.post(`${REACT_APP_BACKEND_URL}/hire/invite`, { inviteeId: invitee._id, invitation: data });
       setShowLoader(false);
       handleCloseForm();
       sendAck(ACK_TYPE.SUCCESS, 'Invitation sent successfully');

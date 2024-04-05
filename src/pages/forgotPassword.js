@@ -24,7 +24,7 @@ function ForgotPassword() {
         setShowLoader(true);
         const data = new FormData(event.currentTarget);
         const email = data.get('email');
-        axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/auth/resetpassword`, { email })
+        axios.post(`${REACT_APP_BACKEND_URL}/auth/resetpassword`, { email })
             .then((response) => {
                 setShowLoader(false);
                 sendAck("Otp sent successfully to your email", ACK_TYPE.SUCCESS);

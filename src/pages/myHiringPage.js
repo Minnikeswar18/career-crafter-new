@@ -39,7 +39,7 @@ function MyHiringPage() {
 
   const onLoad = async () => {
     try {
-      const allInvitations = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/getInvitations`);
+      const allInvitations = await axios.get(`${REACT_APP_BACKEND_URL}/hire/getInvitations`);
       setInvitations(allInvitations.data);
       setLoading(false);
     }
@@ -64,7 +64,7 @@ function MyHiringPage() {
       inviteeUsername: invitation.inviteeUsername,
       inviteeEmail: invitation.inviteeEmail,
     }
-    axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/inviteToChat`, dest)
+    axios.post(`${REACT_APP_BACKEND_URL}/hire/inviteToChat`, {dest})
       .then(async (response) => {
         setShowLoader(false);
         sendAck(ACK_TYPE.SUCCESS, "Chat invite sent successfully");
@@ -76,7 +76,7 @@ function MyHiringPage() {
   }
 
   const deleteInvitation = async (invitationId) => {
-    axios.delete(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/deleteInvitation/${invitationId}`)
+    axios.delete(`${REACT_APP_BACKEND_URL}/hire/deleteInvitation/${invitationId}`)
       .then(async (response) => {
         await onLoad();
         sendAck(ACK_TYPE.SUCCESS, "Invitation deleted successfully");

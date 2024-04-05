@@ -52,7 +52,7 @@ function JobsPage() {
         const jobId = data.value;
         setSelectedJobId(jobId);
         try {
-            const response = await axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/home/similarProfiles/${jobId}`);
+            const response = await axios.get(`${REACT_APP_BACKEND_URL}/home/similarProfiles/${jobId}`);
             const profiles = response.data;
             setProfiles(profiles);
             setShowLoader(false);
@@ -75,7 +75,7 @@ function JobsPage() {
         data.inviteeEmail = invitee.email;
         data.inviteeUsername = invitee.username;
         try {
-            await axios.post(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/hire/invite`, { inviteeId: invitee._id, invitation: data });
+            await axios.post(`${REACT_APP_BACKEND_URL}/hire/invite`, { inviteeId: invitee._id, invitation: data });
             setShowLoader(false);
             handleCloseForm();
             sendAck(ACK_TYPE.SUCCESS, 'Invitation sent successfully');
@@ -96,7 +96,7 @@ function JobsPage() {
             return formattedDate;
         }
 
-        axios.get(`http://localhost:${process.env.REACT_APP_BACKEND_PORT}/home/myjobs`)
+        axios.get(`${REACT_APP_BACKEND_URL}/home/myjobs`)
             .then((response) => {
 
                 const jobs = response.data;
