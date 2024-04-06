@@ -14,7 +14,7 @@ function ProfilePage() {
 
     const onLoad = async () => {
         try {
-            const myProfile = await axios.get(`${REACT_APP_BACKEND_URL}/profile/getProfile`);
+            const myProfile = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/profile/getProfile`);
             setProfileData(myProfile.data);
             setLoading(false);
         }
@@ -52,7 +52,7 @@ function ProfilePage() {
         setShowLoader(true);
         const formData = new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
-        axios.post(`${REACT_APP_BACKEND_URL}/profile/updateProfile`, { profile: data })
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/profile/updateProfile`, { profile: data })
             .then(async (response) => {
                 await onLoad();
                 setShowLoader(false);
@@ -69,7 +69,7 @@ function ProfilePage() {
         setShowLoader(true);
         const formData = new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
-        axios.post(`${REACT_APP_BACKEND_URL}/profile/changeEmail`, { data })
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/profile/changeEmail`, { data })
             .then(async (response) => {
                 setShowLoader(false);
                 sendAck("Email updated successfully , please verify the new email to continue", ACK_TYPE.SUCCESS);
@@ -89,7 +89,7 @@ function ProfilePage() {
         setShowLoader(true);
         const formData = new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
-        axios.post(`${REACT_APP_BACKEND_URL}/profile/changePassword`, { data })
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/profile/changePassword`, { data })
             .then(async (response) => {
                 setShowLoader(false);
                 sendAck("Password updated successfully", ACK_TYPE.SUCCESS);

@@ -28,7 +28,7 @@ function ResetPassword() {
         const formData = new FormData(event.currentTarget);
         const data = Object.fromEntries(formData.entries());
         data.otp = otp;
-        axios.post(`${REACT_APP_BACKEND_URL}/auth/changepassword`, data)
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/changepassword`, data)
             .then((response) => {
                 setShowLoader(false);
                 sendAck("Password reset successfully", ACK_TYPE.SUCCESS);

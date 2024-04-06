@@ -37,7 +37,7 @@ function JobsPage() {
   }, []);
 
   const onLoad = async () => {
-    axios.get(`${REACT_APP_BACKEND_URL}/job/myjobs`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/job/myjobs`)
       .then((response) => {
         setOriginalJobList(response.data);
         setJobList(response.data);
@@ -79,7 +79,7 @@ function JobsPage() {
 
     $('#search-bar').val('');
 
-    axios.post(`${REACT_APP_BACKEND_URL}/job/add`, {newJob})
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/job/add`, {newJob})
       .then(async (response) => {
         await onLoad();
         handleClose();
@@ -94,7 +94,7 @@ function JobsPage() {
 
   const deleteJob = async (jobId) => {
     setShowLoader(true);
-    axios.delete(`${REACT_APP_BACKEND_URL}/job/delete/${jobId}`)
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/job/delete/${jobId}`)
       .then(async (response) => {
         $('#search-bar').val('');
         await onLoad();

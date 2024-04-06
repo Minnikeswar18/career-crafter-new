@@ -40,7 +40,7 @@ function ApplicationsPage() {
 
   const onLoad = async () => {
     try {
-      const allApplications = await axios.get(`${REACT_APP_BACKEND_URL}/job/getApplications/${jobId}`);
+      const allApplications = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/job/getApplications/${jobId}`);
       setApplications(allApplications.data);
       setLoading(false);
     }
@@ -61,7 +61,7 @@ function ApplicationsPage() {
 
   const rejectApplication = async (applicationId) => {
     setShowLoader(true);
-    axios.post(`${REACT_APP_BACKEND_URL}/job/rejectApplication`, { applicationId })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/job/rejectApplication`, { applicationId })
       .then(async (response) => {
         await onLoad();
         setShowLoader(false);
@@ -75,7 +75,7 @@ function ApplicationsPage() {
 
   const acceptApplication = async (applicationId) => {
     setShowLoader(true);
-    axios.post(`${REACT_APP_BACKEND_URL}/job/approveApplication`, { applicationId })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/job/approveApplication`, { applicationId })
       .then(async (response) => {
         await onLoad();
         setShowLoader(false);
@@ -93,7 +93,7 @@ function ApplicationsPage() {
       inviteeUsername: invitation.username,
       inviteeEmail: invitation.email,
     }
-    axios.post(`${REACT_APP_BACKEND_URL}/hire/inviteToChat`, {dest})
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/hire/inviteToChat`, {dest})
       .then(async (response) => {
         setShowLoader(false);
         sendAck(ACK_TYPE.SUCCESS, "Chat invite sent successfully");

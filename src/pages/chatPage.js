@@ -23,7 +23,7 @@ function ChatPage() {
             return;
         }
 
-        const newSocket = io(`${REACT_APP_BACKEND_URL}`);
+        const newSocket = io(`${process.env.REACT_APP_BACKEND_URL}`);
         setSocket(newSocket);
 
         return () => {

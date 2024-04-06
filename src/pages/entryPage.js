@@ -45,7 +45,7 @@ function EntryPage() {
         const formData = new FormData(event.target)
         const data = Object.fromEntries(formData.entries())
 
-        axios.post(`${REACT_APP_BACKEND_URL}/auth/login`, data)
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/login`, data)
             .then((response) => {
                 localStorage.setItem('jwt', response.data.token);
                 event.target.reset();
@@ -65,7 +65,7 @@ function EntryPage() {
 
         data.isRecruiter = data.isRecruiter !== undefined;
         try {
-            await axios.post(`${REACT_APP_BACKEND_URL}/auth/register`, data);
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/register`, data);
             setShowLoader(false);
             sendAck('Account created and verification email sent successfully', ACK_TYPE.SUCCESS);
             setIsLogin(true);
