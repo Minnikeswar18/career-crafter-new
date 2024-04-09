@@ -1,6 +1,7 @@
 import '../../styles/components/profileList.css';
 import img from '../../assets/img/profile-pic.png';
 import Tag from './tag';
+import { Link } from 'react-router-dom';
 
 
 function ProfileList({ profile, handleShowInviteForm }) {
@@ -25,7 +26,7 @@ function ProfileList({ profile, handleShowInviteForm }) {
                 </div>
             </div>
             <div className='buttons-div'>
-                <button className='btn btn-primary mb-3'><a className='profile-link' href='#'>View Profile</a></button>
+                <button className='btn btn-primary mb-3'><Link className='profile-link' to = "#">View Profile</Link></button>
                 <button className='btn btn-success' onClick={() => handleShowInviteForm(profile)}>Invite to Job</button>
             </div>
         </div>

@@ -1,35 +1,39 @@
 import logo from '../../assets/img/logo.png'
 import '../../styles/components/baseHeader.css'
+import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function BaseHeader() {
+
+    const navigate = useNavigate();
 
     const handleSignOut = () => {
         console.log('signing out')
         if (localStorage.getItem('jwt')) {
             localStorage.removeItem('jwt')
-            window.location.href = '/'
+            navigate('/');
         }
     }
 
     const toProfile = () => {
-        window.location.href = '/profile'
+        navigate('/profile');
     }
 
     return (
         <nav className="navbar bg-dark navbar-expand-lg">
             <div className="container-fluid">
-                <a href="/" ><img src={logo} alt="Bootstrap" className='logo ms-3' height="60"></img></a>
+                <Link to="/" ><img src={logo} alt="Bootstrap" className='logo ms-3' height="60"></img></Link>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-4">
                         <li className="nav-item me-3">
-                            <a className="nav-link active home-button" aria-current="page" href="/home">
+                            <Link className="nav-link active home-button" aria-current="page" to="/home">
                                 Home
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-item me-3">
-                            <a className="nav-link jobs-button" aria-current="page" href="/jobs">
+                            <Link className="nav-link jobs-button" aria-current="page" to="/jobs">
                                 Jobs
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-item dropdown">
                             <a
@@ -43,14 +47,14 @@ function BaseHeader() {
                             </a>
                             <ul className="dropdown-menu">
                                 <li>
-                                    <a className="dropdown-item" href="/hire">
+                                    <Link className="dropdown-item" to="/hire">
                                         Hire Talent
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a className="dropdown-item" href="/myhirings">
+                                    <Link className="dropdown-item" to="/myhirings">
                                         My Invites
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </li>

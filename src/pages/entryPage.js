@@ -9,6 +9,7 @@ import checkJwt from '../helpers/jwt';
 import { AckModal, ACK_TYPE } from './components/ackModal';
 import LogoHeader from './components/logoHeader';
 import PopupLoader from './components/popupLoader';
+import { Link } from 'react-router-dom';
 
 function EntryPage() {
 
@@ -116,7 +117,7 @@ function EntryPage() {
                                             />
                                         </div>
                                         <div className="text">
-                                            <a className="forgot-password-link" href="/forgotPassword">Forgot password?</a>
+                                            <Link className="forgot-password-link" to="/forgotPassword">Forgot password?</Link>
                                         </div>
                                         <div className="button input-box">
                                             <input type="submit" defaultValue="Submit" />
